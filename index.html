@@ -296,7 +296,12 @@ textarea::placeholder{color:var(--muted)}
 .planet-hit{position:absolute;inset:0;z-index:2;border:0;padding:0;margin:0;border-radius:50%;background:transparent;cursor:pointer}
 .planet-gl{position:absolute;left:50%;top:50%;width:220%;height:220%;transform:translate(-50%,-50%);z-index:1;pointer-events:none}
 /* what kind of night is it? */
-.tonight{padding-block:clamp(56px,8vw,96px) 0}
+.tonight{padding-block:clamp(56px,8vw,96px) 0;position:relative;isolation:isolate}
+.tsky{position:absolute;inset:0 0 -120px;z-index:-1;pointer-events:none;overflow:hidden}
+.tsky i{position:absolute;inset:0;opacity:0;transition:opacity 1.8s ease}
+.tsky i.on{opacity:1}
+.tsky::after{content:"";position:absolute;inset:0;background:radial-gradient(1px 1px at 12% 30%,rgba(232,229,240,.5),transparent),radial-gradient(1px 1px at 33% 12%,rgba(232,229,240,.4),transparent),radial-gradient(1px 1px at 58% 26%,rgba(232,229,240,.45),transparent),radial-gradient(1px 1px at 81% 16%,rgba(232,229,240,.4),transparent),radial-gradient(1px 1px at 91% 44%,rgba(232,229,240,.35),transparent),radial-gradient(1px 1px at 4% 62%,rgba(232,229,240,.3),transparent);opacity:0;transition:opacity 1.8s ease}
+.tsky.lit::after{opacity:1}
 .feelings{display:flex;gap:8px;flex-wrap:wrap}
 .suggest{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:22px;align-items:center;margin-top:24px;padding:16px;border:1px solid var(--line);border-radius:2px;background:rgba(232,229,240,.02)}
 .suggest canvas{width:100%;aspect-ratio:16/9;max-width:100%;display:block;border-radius:2px;background:var(--night)}
@@ -409,17 +414,24 @@ footer strong{color:var(--ink);font-weight:400}
 <main>
 <div id="viewHome">
   <section id="tonight" class="tonight">
+    <div class="tsky" id="tsky" aria-hidden="true"><i></i><i></i></div>
     <div class="wrap">
       <div class="head">
         <h2>what kind of night is it?</h2>
         <p>tell me how it feels, and i'll find you somewhere to rest.</p>
       </div>
       <div class="feelings" role="group" aria-label="how tonight feels">
-        <button class="chip" type="button" data-feel="heavy" aria-pressed="false"><i class="dot" style="--c:var(--luna)"></i>heavy</button>
-        <button class="chip" type="button" data-feel="restless" aria-pressed="false"><i class="dot" style="--c:var(--neptune)"></i>restless</button>
-        <button class="chip" type="button" data-feel="nostalgic" aria-pressed="false"><i class="dot" style="--c:var(--halcyon)"></i>nostalgic</button>
-        <button class="chip" type="button" data-feel="cozy" aria-pressed="false"><i class="dot" style="--c:var(--mars)"></i>cozy</button>
-        <button class="chip" type="button" data-feel="sleep" aria-pressed="false"><i class="dot" style="--c:var(--saturn)"></i>can't sleep</button>
+        <button class="chip" type="button" data-feel="heavy" aria-pressed="false"><i class="dot" style="--c:#dfe0ea"></i>heavy</button>
+        <button class="chip" type="button" data-feel="restless" aria-pressed="false"><i class="dot" style="--c:#6d72d8"></i>restless</button>
+        <button class="chip" type="button" data-feel="nostalgic" aria-pressed="false"><i class="dot" style="--c:#e8a3a0"></i>nostalgic</button>
+        <button class="chip" type="button" data-feel="cozy" aria-pressed="false"><i class="dot" style="--c:#e07a45"></i>cozy</button>
+        <button class="chip" type="button" data-feel="sleep" aria-pressed="false"><i class="dot" style="--c:#d8b56a"></i>can't sleep</button>
+        <button class="chip" type="button" data-feel="lonely" aria-pressed="false"><i class="dot" style="--c:#5ec4bd"></i>lonely</button>
+        <button class="chip" type="button" data-feel="anxious" aria-pressed="false"><i class="dot" style="--c:#8fa8ff"></i>anxious</button>
+        <button class="chip" type="button" data-feel="dreamy" aria-pressed="false"><i class="dot" style="--c:#c39af0"></i>dreamy</button>
+        <button class="chip" type="button" data-feel="hopeful" aria-pressed="false"><i class="dot" style="--c:#ffd38a"></i>hopeful</button>
+        <button class="chip" type="button" data-feel="lost" aria-pressed="false"><i class="dot" style="--c:#9aa7c7"></i>lost</button>
+        <button class="chip" type="button" data-feel="empty" aria-pressed="false"><i class="dot" style="--c:#7a8079"></i>empty</button>
       </div>
       <div class="suggest" id="suggest" hidden aria-live="polite"></div>
     </div>
@@ -1434,16 +1446,20 @@ try{bodyView=(()=>{
 /* what kind of night is it? */
 (()=>{
   const box=document.getElementById("suggest");if(!box)return;
-  const FEEL={heavy:{w:"heavy",c:"luna",p:["luna","iris"],l:"the light that stays with you all night."},restless:{w:"restless",c:"neptune",p:["neptune"],l:"deep, quiet, and far from everything."},nostalgic:{w:"nostalgic",c:"halcyon",p:["halcyon","iris"],l:"a summer you look back on."},cozy:{w:"cozy",c:"mars",p:["mars"],l:"rust, dust, and warm light."},sleep:{w:"sleepless",c:"saturn",p:["saturn","luna"],l:"something long, to keep you company."}};
+  const FEEL={heavy:{w:"heavy",t:"#dfe0ea",p:["luna", "iris"],l:"the light that stays with you all night."},restless:{w:"restless",t:"#6d72d8",p:["neptune"],l:"deep, quiet, and far from everything."},nostalgic:{w:"nostalgic",t:"#e8a3a0",p:["halcyon", "iris"],l:"a summer you look back on."},cozy:{w:"cozy",t:"#e07a45",p:["mars"],l:"rust, dust, and warm light."},sleep:{w:"sleepless",t:"#d8b56a",p:["saturn", "luna"],l:"something long, to keep you company."},lonely:{w:"lonely",t:"#5ec4bd",p:["proteus", "umbra"],l:"empty places, for when you feel like the only one awake."},anxious:{w:"anxious",t:"#8fa8ff",p:["neptune", "luna"],l:"breathe. nothing is chasing you here."},dreamy:{w:"dreamy",t:"#c39af0",p:["iris", "halcyon"],l:"drift somewhere soft for a while."},hopeful:{w:"hopeful",t:"#ffd38a",p:["luna", "iris"],l:"better days are closer than they feel."},lost:{w:"lost",t:"#9aa7c7",p:["proteus"],l:"it's okay not to know the way yet."},empty:{w:"empty",t:"#7a8079",p:["umbra"],l:"you don't have to feel anything right now."}};
   const queues={},lastPick={};let feel=null;
   function next(c){let q=queues[c];if(!q||!q.length){const pool=FEEL[c].p,p=ENTRIES.filter(e=>e.f.some(v=>pool.includes(v))&&!e.soon);for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]]}
       if(p.length>1&&p[0]===lastPick[c])p.push(p.shift());q=queues[c]=p}const e=q.shift();lastPick[c]=e;return e}
   function show(){const F=FEEL[feel],e=next(feel),era=e&&eraOf(e);if(!e)return;const href=e.id?`https://www.youtube.com/watch?v=${e.id}`:"https://www.youtube.com/@orbitone.mp4/videos";
-    box.innerHTML=`<canvas aria-hidden="true"></canvas><div class="s-copy"><p class="meta">tonight feels <b style="color:var(--${F.c});font-weight:400">${F.w}</b>.</p><p class="feel-line">${F.l}</p><h3>try ${e.n?`entry ${e.n}`:`compilation ${e.c}`}: ${esc(e.t)}</h3><p class="meta">${e.d}${e.dur?` · ${e.dur}`:""}</p><div class="cta"><a class="btn solid" href="${href}" target="_blank" rel="noopener">listen ↗</a><button class="btn" type="button" id="feelAgain">another one</button><a class="btn" href="#archive" id="feelSee">visit ${era}, era ${ERAS[era]?ERAS[era].n:""}</a></div></div>`;
+    box.innerHTML=`<canvas aria-hidden="true"></canvas><div class="s-copy"><p class="meta">tonight feels <b style="color:${F.t};font-weight:400">${F.w}</b>.</p><p class="feel-line">${F.l}</p><h3>try ${e.n?`entry ${e.n}`:`compilation ${e.c}`}: ${esc(e.t)}</h3><p class="meta">${e.d}${e.dur?` · ${e.dur}`:""}</p><div class="cta"><a class="btn solid" href="${href}" target="_blank" rel="noopener">listen ↗</a><button class="btn" type="button" id="feelAgain">another one</button><a class="btn" href="#archive" id="feelSee">visit ${era}, era ${ERAS[era]?ERAS[era].n:""}</a></div></div>`;
     box.hidden=false;try{drawArt(box.querySelector("canvas"),e,"all")}catch(err){}
     document.getElementById("feelAgain").onclick=show;
     document.getElementById("feelSee").addEventListener("click",()=>{const chip=document.querySelector(`.filters .chip[data-f="${era}"]`);if(chip)chip.click()})}
-  document.querySelectorAll(".feelings .chip").forEach(b=>b.onclick=()=>{document.querySelectorAll(".feelings .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));feel=b.dataset.feel;show()});
+  const sky=document.getElementById("tsky"),L=sky?sky.querySelectorAll("i"):[];let front=0;
+  function tint(c){if(!sky||!L.length)return;const back=L[1-front];
+    back.style.background=`radial-gradient(ellipse 85% 70% at 50% 8%,${rgba(c,.2)},transparent 72%),radial-gradient(ellipse 55% 45% at 12% 85%,${rgba(c,.1)},transparent 70%),radial-gradient(ellipse 55% 45% at 90% 75%,${rgba(c,.08)},transparent 70%),linear-gradient(180deg,${rgba(c,.05)},transparent 85%)`;
+    back.classList.add("on");L[front].classList.remove("on");front=1-front;sky.classList.add("lit")}
+  document.querySelectorAll(".feelings .chip").forEach(b=>b.onclick=()=>{document.querySelectorAll(".feelings .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));feel=b.dataset.feel;tint(FEEL[feel].t);show()});
 })();
 
 /* secret: a soft trail of stars behind the cursor */
