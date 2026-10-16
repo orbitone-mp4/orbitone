@@ -463,7 +463,7 @@ footer strong{color:var(--ink);font-weight:400}
         <canvas id="body3d" aria-hidden="true"></canvas>
         <div class="body-label"><span class="pixel glitch" id="bodyName">luna</span><span class="meta" id="bodyEra"></span><p id="bodyFact"></p></div>
         <div class="tip" id="bodyTip" hidden></div>
-        <p class="meta hint">drag to turn it. each light is an entry.</p>
+        <p class="meta hint" id="bodyHint">drag to turn it. each light is an entry.</p>
       </div>
       <div class="grid" id="grid"></div>
       <div class="more">
@@ -970,44 +970,119 @@ try{bodyView=(()=>{
       let c=mixc(hex(0x161917),hex(0x3d463f),n);if(v>.6&&n>.42)c=mixc(c,hex(0x93a596),Math.min(.7,(v-.6)*3.5));return c}).c}
   };
   const GLOW={luna:0xdfe0ea,mars:0xe07a45,neptune:0x6d8cff,saturn:0xd8b56a,halcyon:0xe8a3a0,umbra:0x7a8079,proteus:0x5ec4bd,iris:0xc39af0};
+  const HINT={umbra:"move over it to light the dark.",proteus:"tap it to change its shape.",halcyon:"tap it to warm it like a sunset.",iris:"tap it to send a rainbow.",neptune:"drag it fast to stir the winds.",mars:"tap it to stir up the dust.",luna:"turn it to change its phase.",saturn:"tap it to ripple the rings."};
   // proteus is never quite round: a lumpy, shape-shifting moon
-  const lumpy=(x,y,z)=>{const s=1+.3*(fbm(x*1.15+3,y*1.15,z*1.15,3)-.5)+.08*(fbm(x*3.2,y*3.2+7,z*3.2,2)-.5);return[x*s,y*s*.86,z*s]};
+  const SHAPE0={o:0,amp:.3,ax:1,ay:.86,az:1};
+  const lumpS=(x,y,z,f)=>1+f.amp*(fbm(x*1.15+3+f.o,y*1.15+f.o*.7,z*1.15,3)-.5)+.08*(fbm(x*3.2+f.o,y*3.2+7,z*3.2,2)-.5);
+  const lumpy=(x,y,z,f=SHAPE0)=>{const s=lumpS(x,y,z,f);return[x*s*f.ax,y*s*f.ay,z*s*f.az]};
   function glowTex(){const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d"),g=x.createRadialGradient(128,128,40,128,128,128);
     g.addColorStop(0,"rgba(255,255,255,.55)");g.addColorStop(.38,"rgba(255,255,255,.22)");g.addColorStop(1,"rgba(255,255,255,0)");x.fillStyle=g;x.fillRect(0,0,256,256);return new T.CanvasTexture(c)}
   const gtex=glowTex(),cache={};
   function ringMesh(){const c=document.createElement("canvas");c.width=512;c.height=8;const x=c.getContext("2d"),r=rng(3);
     for(let i=0;i<512;i++){const v=i/512,gap=(v>.52&&v<.58)?.05:1,a=(.35+.5*r())*gap*(v<.05?v*20:1);x.fillStyle=`rgba(${215+r()*30|0},${190+r()*30|0},${150+r()*25|0},${a})`;x.fillRect(i,0,1,8)}
-    const tex=new T.CanvasTexture(c),geo=new T.RingGeometry(1.35,2.35,160,1),pos=geo.attributes.position,uv=geo.attributes.uv,v3=new T.Vector3();
+    const tex=new T.CanvasTexture(c),geo=new T.RingGeometry(1.35,2.35,160,20),pos=geo.attributes.position,uv=geo.attributes.uv,v3=new T.Vector3();
     for(let i=0;i<pos.count;i++){v3.fromBufferAttribute(pos,i);uv.setXY(i,(v3.length()-1.35)/1.0,.5)}
-    const m=new T.Mesh(geo,new T.MeshStandardMaterial({map:tex,transparent:true,side:T.DoubleSide,roughness:1,metalness:0}));m.rotation.x=-Math.PI/2;return m}
+    const m=new T.Mesh(geo,new T.MeshStandardMaterial({map:tex,transparent:true,side:T.DoubleSide,roughness:1,metalness:0}));m.rotation.x=-Math.PI/2;m.userData.base=Float32Array.from(pos.array);return m}
+  // surfaces that answer where you touch them (iris: rainbow ripples, halcyon: a spreading sunset, neptune: winds)
+  function touchShader(mat,kind){
+    const u=mat.userData.u={uTime:{value:0},uHit:{value:[new T.Vector4(0,0,1,-99),new T.Vector4(0,0,1,-99),new T.Vector4(0,0,1,-99)]},uFlow:{value:0}};
+    mat.customProgramCacheKey=()=>"orbitone-touch-"+kind;
+    mat.onBeforeCompile=sh=>{Object.assign(sh.uniforms,u);
+      sh.vertexShader=sh.vertexShader.replace("#include <common>","#include <common>\nvarying vec3 vOP;").replace("#include <begin_vertex>","#include <begin_vertex>\nvOP=normalize(position);");
+      let f=sh.fragmentShader.replace("#include <common>","#include <common>\nvarying vec3 vOP;uniform float uTime;uniform vec4 uHit[3];uniform float uFlow;\nvec3 hue(float h){return clamp(abs(mod(h*6.+vec3(0.,4.,2.),6.)-3.)-1.,0.,1.);}\nfloat adist(vec4 h){return acos(clamp(dot(vOP,normalize(h.xyz)),-1.,1.));}");
+      if(kind==="iris")f=f.replace("#include <emissivemap_fragment>","#include <emissivemap_fragment>\nfor(int i=0;i<3;i++){float t=uTime-uHit[i].w;if(t>0.&&t<4.2){float d=adist(uHit[i]);float q=(d-t*.85)/.2;float b=exp(-q*q);totalEmissiveRadiance+=(hue(fract(d*.9-t*.3))*.7+.3)*b*(1.-t/4.2)*.8;}}");
+      if(kind==="halcyon")f=f.replace("#include <emissivemap_fragment>","#include <emissivemap_fragment>\n{float t=uTime-uHit[0].w;if(t>0.&&t<7.5){float d=adist(uHit[0]);float spread=1.-smoothstep(t*1.05-.45,t*1.05+.45,d);float env=t<4.5?1.:1.-(t-4.5)/3.;vec3 sunset=mix(vec3(1.,.66,.34),vec3(1.,.42,.5),clamp(d/3.1416,0.,1.));totalEmissiveRadiance+=sunset*diffuseColor.rgb*spread*env*.6;}}");
+      if(kind==="neptune")f=f.replace("#include <map_fragment>","#ifdef USE_MAP\nvec2 wuv=vUv;float la=(vUv.y-.5)*3.1416;wuv.x+=uFlow*(sin(la*9.)*.05+.02);vec4 texelColor=texture2D(map,wuv);texelColor=mapTexelToLinear(texelColor);diffuseColor*=texelColor;\n#endif");
+      sh.fragmentShader=f};
+  }
   function build(k){
     if(cache[k])return cache[k];
     const g=new T.Group(),tex=new T.CanvasTexture(TEX[k]());
+    if(k==="neptune")tex.wrapS=T.RepeatWrapping;
     const geo=new T.SphereGeometry(1,96,64);
-    if(k==="proteus"){const pa=geo.attributes.position;for(let i=0;i<pa.count;i++){const v=lumpy(pa.getX(i),pa.getY(i),pa.getZ(i));pa.setXYZ(i,v[0],v[1],v[2])}geo.computeVertexNormals()}
-    const planet=new T.Mesh(geo,new T.MeshStandardMaterial({map:tex,roughness:k==="neptune"||k==="saturn"?.75:k==="iris"?.6:.95,metalness:0}));
+    if(k==="proteus"){const pa=geo.attributes.position;geo.userData.base=Float32Array.from(pa.array);for(let i=0;i<pa.count;i++){const v=lumpy(pa.getX(i),pa.getY(i),pa.getZ(i));pa.setXYZ(i,v[0],v[1],v[2])}geo.computeVertexNormals();g.userData.shape=SHAPE0}
+    const mat=new T.MeshStandardMaterial({map:tex,roughness:k==="neptune"||k==="saturn"?.75:k==="iris"?.6:.95,metalness:0});
+    if(k==="iris"||k==="halcyon"||k==="neptune")touchShader(mat,k);
+    const planet=new T.Mesh(geo,mat);
     const spin=new T.Group();spin.add(planet);g.add(spin);
     const glow=new T.Sprite(new T.SpriteMaterial({map:gtex,color:GLOW[k],transparent:true,blending:T.AdditiveBlending,depthWrite:false,opacity:k==="luna"?.35:k==="umbra"||k==="proteus"?.5:.7}));
     glow.scale.set(3.2,3.2,1);g.add(glow);
-    if(k==="saturn"){const r=ringMesh();spin.add(r);g.rotation.z=.42;g.rotation.x=.32}
+    if(k==="saturn"){const r=ringMesh();spin.add(r);g.rotation.z=.42;g.rotation.x=.32;g.userData.ring=r}
     const list=ENTRIES.filter(e=>e.f.includes(k)),marks=[],mr=rng(hash(k)),GA=Math.PI*(3-Math.sqrt(5)),off=mr()*6;
     const mcol=new T.Color(k==="umbra"?0xd8f0dc:k==="proteus"?0xd6fff8:k==="luna"?0xfff3df:0xfff6ea);
     list.forEach((e,i)=>{const y=-.72+1.44*(i+.5)/list.length,rr=Math.sqrt(1-y*y),th=i*GA+off;
       const m=new T.Mesh(new T.SphereGeometry(.03,12,8),new T.MeshBasicMaterial({color:mcol}));
-      const sp=k==="proteus"?lumpy(Math.cos(th)*rr,y,Math.sin(th)*rr):[Math.cos(th)*rr,y,Math.sin(th)*rr];m.position.set(sp[0]*1.012,sp[1]*1.012,sp[2]*1.012);
+      const dir=[Math.cos(th)*rr,y,Math.sin(th)*rr],sp=k==="proteus"?lumpy(dir[0],dir[1],dir[2]):dir;m.position.set(sp[0]*1.012,sp[1]*1.012,sp[2]*1.012);
       const halo=new T.Sprite(new T.SpriteMaterial({map:gtex,color:GLOW[k],transparent:true,blending:T.AdditiveBlending,depthWrite:false,opacity:.9}));
-      halo.scale.set(.22,.22,1);m.add(halo);m.userData={e,halo};spin.add(m);marks.push(m)});
-    g.userData.marks=marks;
-    g.userData.planet=spin;cache[k]=g;return g;
+      halo.scale.set(.22,.22,1);m.add(halo);m.userData={e,halo,dir};spin.add(m);marks.push(m)});
+    Object.assign(g.userData,{marks,planet:spin,mesh:planet,mat,glow,glowBase:new T.Color(GLOW[k])});
+    cache[k]=g;return g;
   }
-  let cur=null,run=false,raf=0,W=0,H=0,vy=0,vx=0,drag=null;
+  let cur=null,curK=null,run=false,raf=0,W=0,H=0,vy=0,vx=0,drag=null,lastF=0;
+  // the reactions
+  const SUNC=new T.Color(0xfff1dc),WARM=new T.Color(0xffa062),WARMGLOW=new T.Color(0xffb070),hintEl=document.getElementById("bodyHint");
+  const torch=new T.PointLight(0xd6f2dc,0,2.2,2);scene.add(torch);let torchOn=0;const torchTo=new T.Vector3(0,0,3);
+  let moonAge=.72,phaseShown="";
+  const PH=["new moon","waxing crescent","first quarter","waxing gibbous","full moon","waning gibbous","last quarter","waning crescent"];
+  const phaseName=()=>PH[Math.round(moonAge/(Math.PI/4))%8];
+  function moonSun(){const th=Math.PI-moonAge;sun.position.set(Math.sin(th)*3.2,.45,Math.cos(th)*3.2)}
+  function setHint(){if(!hintEl||!curK)return;let h=HINT[curK]||"";if(curK==="luna"){phaseShown=phaseName();h=h.replace(/\.$/,"")+` (${phaseShown}).`}hintEl.textContent=`${h} each light is an entry.`}
+  const bursts=[];
+  function dust(g,pointW){const N=64,local=g.worldToLocal(pointW.clone()),n=local.clone().normalize(),pos=new Float32Array(N*3),col=new Float32Array(N*3),vel=[],r=Math.random;
+    const C=[[.88,.48,.27],[.75,.33,.17],[.95,.7,.42],[.98,.9,.78]];
+    for(let i=0;i<N;i++){pos.set([local.x,local.y,local.z],i*3);col.set(C[i%4],i*3);
+      const t=new T.Vector3(r()-.5,r()-.5,r()-.5);t.addScaledVector(n,-t.dot(n));
+      vel.push(n.clone().multiplyScalar(.14+r()*.3).add(t.multiplyScalar(.35+r()*.45)))}
+    const geo=new T.BufferGeometry();geo.setAttribute("position",new T.BufferAttribute(pos,3));geo.setAttribute("color",new T.BufferAttribute(col,3));
+    const pts=new T.Points(geo,new T.PointsMaterial({size:.15,map:gtex,vertexColors:true,transparent:true,depthWrite:false,opacity:1}));
+    g.add(pts);bursts.push({g,pts,vel,t:0,life:4.2})}
+  function morph(g){const geo=g.userData.mesh.geometry,base=geo.userData.base,r=Math.random,from=g.userData.shape,to={o:5+r()*40,amp:.24+r()*.2,ax:.9+r()*.22,ay:.74+r()*.22,az:.9+r()*.22};
+    const n=base.length/3,S0=new Float32Array(n),S1=new Float32Array(n);
+    for(let i=0;i<n;i++){const x=base[i*3],y=base[i*3+1],z=base[i*3+2];S0[i]=lumpS(x,y,z,from);S1[i]=lumpS(x,y,z,to)}
+    const M=g.userData.marks.map(m=>{const d=m.userData.dir;return[lumpS(d[0],d[1],d[2],from),lumpS(d[0],d[1],d[2],to)]});
+    g.userData.morph={from,to,S0,S1,M,t:0};g.userData.shape=to}
+  function glowAt(g,kind,pointW){const u=g.userData.mat.userData.u;if(!u)return;const l=g.userData.mesh.worldToLocal(pointW.clone()).normalize(),t=performance.now()/1000;
+    if(kind==="iris"){g.userData.ri=((g.userData.ri||0)+1)%3;u.uHit.value[g.userData.ri].set(l.x,l.y,l.z,t)}else u.uHit.value[0].set(l.x,l.y,l.z,t)}
+  function ripple(g,pointW){const ring=g.userData.ring;if(!ring)return;const l=ring.worldToLocal(pointW.clone());g.userData.rip={t:0,a:Math.atan2(l.y,l.x)}}
+  function react(h){const g=cur,k=curK;if(!g||!h)return;
+    if(k==="proteus"){if(!g.userData.morph)morph(g)}
+    else if(k==="iris"||k==="halcyon")glowAt(g,k,h.point);
+    else if(k==="mars")dust(g,h.point);
+    else if(k==="saturn")ripple(g,h.point);
+    else if(k==="neptune")g.userData.windE=1}
+  function animate(dt,now){const g=cur,u=g.userData,un=u.mat.userData.u,ts=now/1000;
+    if(un)un.uTime.value=ts;
+    if(curK==="umbra"){torch.position.lerp(torchTo,.25);torch.intensity+=(torchOn*3.2-torch.intensity)*.12}else torch.intensity=0;
+    if(curK==="halcyon"&&un){const t=ts-un.uHit.value[0].w,env=t>0&&t<7.5?(t<4.5?Math.min(1,t/2):1-(t-4.5)/3):0;
+      sun.color.copy(SUNC).lerp(WARM,env*.45);u.glow.material.color.copy(u.glowBase).lerp(WARMGLOW,env);u.glow.material.opacity=.7+.25*env}
+    if(curK==="neptune"&&un){u.windW=(u.windW||0)*Math.pow(.75,dt)+(u.windE||0)*dt*1.4;u.windE=(u.windE||0)*Math.pow(.5,dt);un.uFlow.value=u.windW}
+    if(curK==="luna"){u.glow.material.opacity=.12+.33*(1-Math.cos(moonAge))/2;if(phaseName()!==phaseShown)setHint()}
+    const mo=u.morph;if(mo){mo.t+=dt/1.8;const k=Math.min(1,mo.t),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2,f=mo.from,t=mo.to;
+      const geo=u.mesh.geometry,pa=geo.attributes.position,base=geo.userData.base,ax=lp(f.ax,t.ax,e),ay=lp(f.ay,t.ay,e),az=lp(f.az,t.az,e);
+      for(let i=0;i<pa.count;i++){const s=lp(mo.S0[i],mo.S1[i],e);pa.setXYZ(i,base[i*3]*s*ax,base[i*3+1]*s*ay,base[i*3+2]*s*az)}
+      pa.needsUpdate=true;geo.computeVertexNormals();
+      u.marks.forEach((m,j)=>{const d=m.userData.dir,s=lp(mo.M[j][0],mo.M[j][1],e)*1.012;m.position.set(d[0]*s*ax,d[1]*s*ay,d[2]*s*az)});
+      if(k>=1){geo.computeBoundingSphere();u.morph=null}}
+    const rp=u.rip;if(rp){rp.t+=dt;const ring=u.ring,pa=ring.geometry.attributes.position,b=ring.userData.base,amp=.17*Math.exp(-rp.t*.75),done=rp.t>4.2;
+      for(let i=0;i<pa.count;i++){const x=b[i*3],y=b[i*3+1],r=Math.hypot(x,y),th=Math.atan2(y,x);pa.setZ(i,done?0:amp*Math.sin((r-1.35)*7-rp.t*5)*(.5+.5*Math.cos(th-rp.a))*Math.min(1,rp.t*2.5))}
+      pa.needsUpdate=true;ring.geometry.computeVertexNormals();if(done)u.rip=null}
+    for(let i=bursts.length-1;i>=0;i--){const b=bursts[i];b.t+=dt;const p=b.pts.geometry.attributes.position;
+      for(let j=0;j<b.vel.length;j++){const v=b.vel[j];v.multiplyScalar(.985);v.x+=.05*dt;v.y+=.02*Math.sin(b.t*2+j)*dt;p.setXYZ(j,p.getX(j)+v.x*dt,p.getY(j)+v.y*dt,p.getZ(j)+v.z*dt)}
+      p.needsUpdate=true;b.pts.material.opacity=Math.max(0,1-b.t/b.life);
+      if(b.t>=b.life){b.g.remove(b.pts);b.pts.geometry.dispose();b.pts.material.dispose();bursts.splice(i,1)}}
+  }
   const qt=new T.Quaternion(),axis=new T.Vector3();
-  function turn(dx,dy){qt.setFromAxisAngle(axis.set(0,1,0),dx*.009);pivot.quaternion.premultiply(qt);qt.setFromAxisAngle(axis.set(1,0,0),dy*.009);pivot.quaternion.premultiply(qt)}
+  function turn(dx,dy){qt.setFromAxisAngle(axis.set(0,1,0),dx*.009);pivot.quaternion.premultiply(qt);qt.setFromAxisAngle(axis.set(1,0,0),dy*.009);pivot.quaternion.premultiply(qt);
+    if(curK==="luna"){moonAge=(moonAge+dx*.0045+Math.PI*2)%(Math.PI*2);moonSun()}
+    if(curK==="neptune"&&cur)cur.userData.windE=Math.min(1,(cur.userData.windE||0)+(Math.abs(dx)+Math.abs(dy))*.0035)}
   function size(){W=wrap.clientWidth||600;H=Math.round(Math.min(460,Math.max(300,W*.55)));renderer.setSize(W,H,false);cv.style.height=H+"px";cam.aspect=W/H;cam.updateProjectionMatrix()}
   const ray=new T.Raycaster(),ptr=new T.Vector2(),tipEl=document.getElementById("bodyTip"),wp=new T.Vector3(),toCam=new T.Vector3();
   let hoverM=null,pinM=null,moved=0;
-  function pickM(cx,cy){if(!cur)return null;const r=cv.getBoundingClientRect();ptr.set((cx-r.left)/r.width*2-1,-((cy-r.top)/r.height)*2+1);ray.setFromCamera(ptr,cam);
-    const hits=ray.intersectObjects([cur.userData.planet],true).filter(h=>h.object.type==="Mesh");
+  function hitsAt(cx,cy){if(!cur)return[];const r=cv.getBoundingClientRect();ptr.set((cx-r.left)/r.width*2-1,-((cy-r.top)/r.height)*2+1);ray.setFromCamera(ptr,cam);
+    return ray.intersectObjects([cur.userData.planet],true).filter(h=>h.object.type==="Mesh")}
+  const hitAt=(cx,cy)=>hitsAt(cx,cy)[0]||null;
+  function aimTorch(cx,cy){if(curK!=="umbra")return;const h=hitAt(cx,cy);if(h){torchTo.copy(h.point).multiplyScalar(1.45);torchOn=1}else torchOn=0}
+  function pickM(cx,cy){const hits=hitsAt(cx,cy);
     if(!hits.length)return null;let m=hits[0].object;
     if(!m.userData.e){const near=cur.userData.marks.map(mk=>{mk.getWorldPosition(wp);return{mk,d:wp.distanceTo(hits[0].point)}}).sort((a,b)=>a.d-b.d)[0];m=near&&near.d<.09?near.mk:null}
     return m&&m.userData.e?m:null}
@@ -1016,33 +1091,39 @@ try{bodyView=(()=>{
     tipEl.innerHTML=`<strong>${esc(e.t)}</strong><span>${e.n?`entry ${e.n}`:`compilation ${e.c}`} · ${e.d}</span><a href="${href}" target="_blank" rel="noopener">${e.soon?"coming soon":"listen ↗"}</a>`;tipEl.hidden=false;placeTip(m)}
   function placeTip(m){m.getWorldPosition(wp);wp.project(cam);const x=(wp.x+1)/2*W,y=(1-wp.y)/2*H,tw=tipEl.offsetWidth||200,th=tipEl.offsetHeight||80;
     let l=x+16;if(l+tw>W-8)l=x-16-tw;tipEl.style.left=Math.max(8,l)+"px";tipEl.style.top=Math.max(8,Math.min(H-th-8,y-th/2))+"px"}
-  function frame(now){
+  function frame(now){const dt=lastF?Math.min(.05,(now-lastF)/1000):.016;lastF=now;
     if(cur){const calm=hoverM||pinM;cur.userData.planet.rotation.y+=reduce||calm?0:.0016;
       if(!drag&&(Math.abs(vx)>.01||Math.abs(vy)>.01)){turn(vx,vy);vx*=.93;vy*=.93}
       cur.userData.marks.forEach((m,i)=>{const on=m===hoverM||m===pinM,s=on?1.9:1+(reduce?0:.18*Math.sin((now||0)/600+i));m.scale.setScalar(s)});
-      const show=pinM||hoverM;if(show){if(facing(show))placeTip(show);else{tipEl.hidden=true;if(pinM===show)pinM=null;if(hoverM===show)hoverM=null}}}
+      const show=pinM||hoverM;if(show){if(facing(show))placeTip(show);else{tipEl.hidden=true;if(pinM===show)pinM=null;if(hoverM===show)hoverM=null}}
+      animate(dt,now||0)}
     renderer.render(scene,cam);if(run)raf=requestAnimationFrame(frame)}
-  cv.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY};moved=0;vx=vy=0;cv.setPointerCapture(e.pointerId)});
+  cv.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY};moved=0;vx=vy=0;cv.setPointerCapture(e.pointerId);aimTorch(e.clientX,e.clientY)});
   cv.addEventListener("pointermove",e=>{
     if(drag&&cur){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;moved+=Math.abs(dx)+Math.abs(dy);drag={x:e.clientX,y:e.clientY};
-      if(moved>5){turn(dx,dy);vx=dx*.35;vy=dy*.35}return}
+      if(moved>5){turn(dx,dy);vx=dx*.35;vy=dy*.35}aimTorch(e.clientX,e.clientY);return}
+    aimTorch(e.clientX,e.clientY);
     if(e.pointerType!=="mouse"||pinM)return;
     const m=pickM(e.clientX,e.clientY);hoverM=m&&facing(m)?m:null;cv.style.cursor=hoverM?"pointer":"grab";
     if(hoverM)showTip(hoverM);else tipEl.hidden=true});
   const end=e=>{if(drag&&moved<=5&&e&&e.type==="pointerup"){const m=pickM(e.clientX,e.clientY);
-      if(m&&facing(m)){pinM=m;hoverM=null;showTip(m)}else{pinM=null;tipEl.hidden=true}}
+      if(m&&facing(m)){pinM=m;hoverM=null;showTip(m)}else{pinM=null;tipEl.hidden=true;react(hitAt(e.clientX,e.clientY))}}
+    if(e&&e.pointerType&&e.pointerType!=="mouse")torchOn=0;
     drag=null};
   cv.addEventListener("pointerup",end);cv.addEventListener("pointercancel",end);
-  cv.addEventListener("pointerleave",()=>{if(!drag){hoverM=null;if(!pinM)tipEl.hidden=true}});
+  cv.addEventListener("pointerleave",()=>{torchOn=0;if(!drag){hoverM=null;if(!pinM)tipEl.hidden=true}});
   window.addEventListener("resize",()=>{if(run)size()});
   return{set(k){
     cancelAnimationFrame(raf);run=false;
-    if(!k||!TEX[k]){wrap.hidden=true;return}
+    if(!k||!TEX[k]){wrap.hidden=true;curK=null;return}
     wrap.hidden=false;document.getElementById("bodyName").textContent=k;document.getElementById("bodyFact").textContent=FACT[k];
     document.getElementById("bodyEra").textContent=k==="saturn"?"the long mixes, from every era":ERAS[k]?ERAS[k].tag:"";
-    size();if(cur)pivot.remove(cur);cur=build(k);pivot.add(cur);
-    if(k==="umbra"){sun.position.set(-3,.6,-2.2);amb.intensity=.12}else if(k==="proteus"){sun.position.set(-3,1.2,1.1);amb.intensity=.2}else{sun.position.set(-3,1.6,3);amb.intensity=.35}
-    hoverM=pinM=null;tipEl.hidden=true;pivot.quaternion.identity();vx=reduce?0:5;vy=0;run=true;raf=requestAnimationFrame(frame);
+    size();if(cur)pivot.remove(cur);cur=build(k);curK=k;pivot.add(cur);
+    sun.color.copy(SUNC);sun.intensity=1.35;torch.intensity=0;torchOn=0;
+    if(k==="umbra"){sun.position.set(-3,.6,-2.2);amb.intensity=.12}else if(k==="proteus"){sun.position.set(-3,1.2,1.1);amb.intensity=.2}
+    else if(k==="luna"){moonAge=.72;moonSun();sun.intensity=1.5;amb.intensity=.05}else{sun.position.set(-3,1.6,3);amb.intensity=.35}
+    setHint();
+    hoverM=pinM=null;tipEl.hidden=true;pivot.quaternion.identity();vx=reduce?0:5;vy=0;lastF=0;run=true;raf=requestAnimationFrame(frame);
   }};
 })();}catch(err){document.getElementById("bodyWrap").hidden=true}
 
