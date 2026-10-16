@@ -40,7 +40,7 @@
   --muted:#8e93aa;
   --line:rgba(232,229,240,.12);
   --red:#ff3d5e;
-  --all:#fde6c4;--luna:#dfe0ea;--mars:#e07a45;--neptune:#6d72d8;--saturn:#d8b56a;--halcyon:#e8a3a0;--umbra:#7a8079;
+  --all:#fde6c4;--luna:#dfe0ea;--mars:#e07a45;--neptune:#6d72d8;--saturn:#d8b56a;--halcyon:#e8a3a0;--umbra:#7a8079;--proteus:#5ec4bd;--iris:#c39af0;
   --blue:#4170ff;
   --f-pixel:"Silkscreen","Courier New",monospace;
   --f-body:"Newsreader",Georgia,"Times New Roman",serif;
@@ -89,6 +89,7 @@ section{padding-block:clamp(64px,9vw,110px)}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c);display:inline-block}
 .pdesc{margin:0 0 28px;font-size:13px;display:grid;gap:2px}
 .pdesc em{font-style:normal;color:var(--ink);opacity:.75}
+.chip .era-n{opacity:.55;margin-right:-2px}
 .chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-meta);font-size:12px;padding:8px 12px;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;cursor:pointer}
 .chip[aria-pressed="true"]{color:var(--void);background:var(--ink);border-color:var(--ink)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:28px 22px}
@@ -152,6 +153,7 @@ textarea::placeholder{color:var(--muted)}
 .body-label{position:absolute;left:16px;top:14px;display:grid;gap:6px;max-width:min(320px,70%);pointer-events:none}
 .body-label .pixel{font-size:15px}
 .body-label p{margin:0;font-style:italic;font-weight:300;font-size:16px;color:var(--glow);line-height:1.4}
+.body-label .meta{margin-top:-2px}
 .body3d .hint{position:absolute;left:16px;bottom:10px;margin:0;font-size:11px;pointer-events:none}
 /* ball room */
 .ballroom{border:1px solid var(--line);border-radius:2px;overflow:hidden;background:#05070a}
@@ -312,10 +314,12 @@ textarea::placeholder{color:var(--muted)}
 .about-block a{color:var(--glow)}
 .legend-title{margin-top:48px}
 .legend{list-style:none;margin:16px 0 0;padding:0;display:grid;max-width:760px}
-.legend li{display:grid;grid-template-columns:14px 110px minmax(0,1fr) auto;gap:14px;align-items:baseline;padding-block:14px;border-top:1px solid var(--line)}
+.legend li{display:grid;grid-template-columns:14px 172px minmax(0,1fr) auto;gap:14px;align-items:baseline;padding-block:14px;border-top:1px solid var(--line)}
 .legend li:last-child{border-bottom:1px solid var(--line)}
 .legend .dot{align-self:center}
 .legend b{font-weight:400;font-family:var(--f-meta);font-size:13px;letter-spacing:.06em}
+.legend b small{display:block;margin-top:3px;font-size:11px;letter-spacing:.02em;color:var(--muted);white-space:nowrap}
+.legend-sub{margin:6px 0 0;font-style:italic;font-weight:300;color:var(--muted)}
 .legend span{font-style:italic;font-weight:300;color:var(--glow)}
 .legend a{font-family:var(--f-meta);font-size:12px;color:var(--muted);text-decoration:none;white-space:nowrap}
 .legend a:hover{color:var(--ink)}
@@ -426,14 +430,16 @@ footer strong{color:var(--ink);font-weight:400}
         <h2>the archive</h2>
         <p>every entry.</p>
       </div>
-      <div class="filters" role="group" aria-label="clusters">
+      <div class="filters" role="group" aria-label="eras">
         <button class="chip" type="button" data-f="all" aria-pressed="true"><i class="dot" style="--c:var(--all)"></i>the orbit</button>
-        <button class="chip" type="button" data-f="luna" aria-pressed="false"><i class="dot" style="--c:var(--luna)"></i>cluster luna</button>
-        <button class="chip" type="button" data-f="mars" aria-pressed="false"><i class="dot" style="--c:var(--mars)"></i>cluster mars</button>
-        <button class="chip" type="button" data-f="neptune" aria-pressed="false"><i class="dot" style="--c:var(--neptune)"></i>cluster neptune</button>
-        <button class="chip" type="button" data-f="saturn" aria-pressed="false"><i class="dot" style="--c:var(--saturn)"></i>cluster saturn</button>
-        <button class="chip" type="button" data-f="halcyon" aria-pressed="false"><i class="dot" style="--c:var(--halcyon)"></i>cluster halcyon</button>
-        <button class="chip" type="button" data-f="umbra" aria-pressed="false"><i class="dot" style="--c:var(--umbra)"></i>cluster umbra</button>
+        <button class="chip" type="button" data-f="umbra" aria-pressed="false"><i class="dot" style="--c:var(--umbra)"></i><span class="era-n">era 1 ·</span>umbra</button>
+        <button class="chip" type="button" data-f="proteus" aria-pressed="false"><i class="dot" style="--c:var(--proteus)"></i><span class="era-n">era 2 ·</span>proteus</button>
+        <button class="chip" type="button" data-f="halcyon" aria-pressed="false"><i class="dot" style="--c:var(--halcyon)"></i><span class="era-n">era 3 ·</span>halcyon</button>
+        <button class="chip" type="button" data-f="iris" aria-pressed="false"><i class="dot" style="--c:var(--iris)"></i><span class="era-n">era 4 ·</span>iris</button>
+        <button class="chip" type="button" data-f="neptune" aria-pressed="false"><i class="dot" style="--c:var(--neptune)"></i><span class="era-n">era 5 ·</span>neptune</button>
+        <button class="chip" type="button" data-f="mars" aria-pressed="false"><i class="dot" style="--c:var(--mars)"></i><span class="era-n">era 6 ·</span>mars</button>
+        <button class="chip" type="button" data-f="luna" aria-pressed="false"><i class="dot" style="--c:var(--luna)"></i><span class="era-n">era 7 ·</span>luna</button>
+        <button class="chip" type="button" data-f="saturn" aria-pressed="false"><i class="dot" style="--c:var(--saturn)"></i>saturn<span class="era-n">· the long mixes</span></button>
       </div>
       <p class="pdesc meta" id="pdesc"></p>
       <div class="orrery" id="orreryWrap">
@@ -443,7 +449,7 @@ footer strong{color:var(--ink);font-weight:400}
       </div>
       <div class="body3d" id="bodyWrap" hidden>
         <canvas id="body3d" aria-hidden="true"></canvas>
-        <div class="body-label"><span class="pixel glitch" id="bodyName">luna</span><p id="bodyFact"></p></div>
+        <div class="body-label"><span class="pixel glitch" id="bodyName">luna</span><span class="meta" id="bodyEra"></span><p id="bodyFact"></p></div>
         <div class="tip" id="bodyTip" hidden></div>
         <p class="meta hint">drag to turn it. each light is an entry.</p>
       </div>
@@ -665,14 +671,17 @@ footer strong{color:var(--ink);font-weight:400}
         <div class="about-block"><h3>entries &amp; compilations</h3><p>every video is an entry, numbered from 001. compilations 01 to 03 are the long mixes from before every entry became an hour long.</p></div>
       </div>
       <h3 class="legend-title">the solar system</h3>
+      <p class="legend-sub">every planet is an era of orbitone., from the first entry to now.</p>
       <ul class="legend">
           <li><i class="dot" style="--c:var(--all)"></i><b>sol</b><span>the center of everything. every entry orbits here.</span><a href="#archive" data-visit="all">visit the orbit →</a></li>
-          <li><i class="dot" style="--c:var(--luna)"></i><b>luna</b><span>the light that stays with you all night.</span><a href="#archive" data-visit="luna">visit cluster luna →</a></li>
-          <li><i class="dot" style="--c:var(--mars)"></i><b>mars</b><span>rust, dust, and warm light.</span><a href="#archive" data-visit="mars">visit cluster mars →</a></li>
-          <li><i class="dot" style="--c:var(--neptune)"></i><b>neptune</b><span>the farthest, coldest, deepest blue.</span><a href="#archive" data-visit="neptune">visit cluster neptune →</a></li>
-          <li><i class="dot" style="--c:var(--saturn)"></i><b>saturn</b><span>countless pieces circling together.</span><a href="#archive" data-visit="saturn">visit cluster saturn →</a></li>
-          <li><i class="dot" style="--c:var(--halcyon)"></i><b>halcyon</b><span>not on any star chart. it only exists in memories you have looooooong forgotten.</span><a href="#archive" data-visit="halcyon">visit cluster halcyon →</a></li>
-          <li><i class="dot" style="--c:var(--umbra)"></i><b>umbra</b><span>the darkest part of the shadow. where orbitone. began.</span><a href="#archive" data-visit="umbra">visit cluster umbra →</a></li>
+          <li><i class="dot" style="--c:var(--umbra)"></i><b>umbra<small data-era="umbra"></small></b><span>the darkest part of the shadow. where orbitone. began.</span><a href="#archive" data-visit="umbra">visit umbra →</a></li>
+          <li><i class="dot" style="--c:var(--proteus)"></i><b>proteus<small data-era="proteus"></small></b><span>a moon that never kept one shape. night roads, dark water, staircases, the void.</span><a href="#archive" data-visit="proteus">visit proteus →</a></li>
+          <li><i class="dot" style="--c:var(--halcyon)"></i><b>halcyon<small data-era="halcyon"></small></b><span>not on any star chart. it only exists in memories you have looooooong forgotten.</span><a href="#archive" data-visit="halcyon">visit halcyon →</a></li>
+          <li><i class="dot" style="--c:var(--iris)"></i><b>iris<small data-era="iris"></small></b><span>the messenger who rides the rainbow. golden hours, snowstorms, and places that waited for you.</span><a href="#archive" data-visit="iris">visit iris →</a></li>
+          <li><i class="dot" style="--c:var(--neptune)"></i><b>neptune<small data-era="neptune"></small></b><span>the farthest, coldest, deepest blue.</span><a href="#archive" data-visit="neptune">visit neptune →</a></li>
+          <li><i class="dot" style="--c:var(--mars)"></i><b>mars<small data-era="mars"></small></b><span>rust, dust, and warm light.</span><a href="#archive" data-visit="mars">visit mars →</a></li>
+          <li><i class="dot" style="--c:var(--luna)"></i><b>luna<small data-era="luna"></small></b><span>the light that stays with you all night.</span><a href="#archive" data-visit="luna">visit luna →</a></li>
+          <li><i class="dot" style="--c:var(--saturn)"></i><b>saturn<small>the long mixes</small></b><span>countless pieces circling together.</span><a href="#archive" data-visit="saturn">visit saturn →</a></li>
       </ul>
       <div class="about-body" style="margin-top:44px">
         <div class="about-block"><h3>find orbitone.</h3><p><a href="https://www.youtube.com/@orbitone.mp4" target="_blank" rel="noopener">youtube.com/@orbitone.mp4</a></p></div>
@@ -714,16 +723,24 @@ footer strong{color:var(--ink);font-weight:400}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-const ENTRIES=[{"t": "i think i'll be okay.", "d": "oct 15", "f": ["luna"], "dur": "1:13:50", "id": "kTZVPDBJGQ0", "n": "036"}, {"t": "i am still here.", "d": "oct 12", "f": ["luna"], "dur": "1:09:14", "id": "Zn1qU2PMbUs", "n": "035"}, {"t": "liminal ambient octobercore.", "d": "oct 5", "f": ["mars"], "dur": "15:05", "id": "JpfVmSKiyrg", "n": "034"}, {"t": "liminal septembercore.", "d": "sep 28", "f": ["mars"], "dur": "30:05", "id": "OIN-jn0dNLc", "n": "033"}, {"t": "liminal autumncore.", "d": "sep 21", "f": ["mars", "saturn"], "dur": "1:00:05", "id": "4aezcdh0eLc", "c": "03"}, {"t": "music to shut down your head.", "d": "sep 14", "f": ["neptune"], "dur": "30:05", "id": "M70yBnKQ7VU", "n": "032"}, {"t": "cold sanctuary.", "d": "sep 7", "f": ["neptune", "saturn"], "dur": "1:00:05", "id": "u0LDonfYdKk", "c": "02"}, {"t": "never feeling fulfilled.", "d": "aug 31", "f": ["neptune"], "dur": "30:05", "id": "Mp_94DrafqM", "n": "031"}, {"t": "vanishing point.", "d": "aug 24", "f": ["neptune"], "dur": "30:06", "id": "4P5RAdyfdOs", "n": "030"}, {"t": "sublime.", "d": "aug 17", "f": ["neptune", "saturn"], "dur": "1:00:06", "id": "WprPCCf2tnM", "c": "01"}, {"t": "you're safe here...", "d": "aug 13", "f": ["neptune"], "dur": "15:06", "id": "aNfRMsbnEZM", "n": "029"}, {"t": "this is what escape looks like...", "d": "aug 10", "f": ["neptune"], "dur": "15:06", "id": "hfdJSNS6eR8", "n": "028"}, {"t": "for your endless and heavy nights...", "d": "aug 6", "f": ["neptune"], "dur": "15:06", "id": "xiDwxOylBX0", "n": "027"}, {"t": "please unburden your soul tonight...", "d": "aug 3", "f": ["neptune"], "dur": "15:06", "id": "i3TPLXgozuA", "n": "026"}, {"t": "a room from a dream you forgot", "d": "jul 30", "f": ["halcyon"], "dur": "15:06", "id": "yi4zqZ7nfsE", "n": "025"}, {"t": "at the edge of the world...", "d": "jul 27", "f": ["halcyon"], "dur": "15:06", "id": "pb22iiXoq1E", "n": "024"}, {"t": "this hill has been waiting for you", "d": "jul 23", "f": ["halcyon"], "dur": "15:06", "id": "mo4z6BVFSzg", "n": "023"}, {"t": "you are caught in a snowstorm", "d": "jul 20", "f": ["halcyon"], "dur": "15:06", "id": "kSMai7zAwX4", "n": "022"}, {"t": "somewhere you've never been", "d": "jul 16", "f": ["halcyon"], "dur": "15:06", "id": "vDXDXHPDIkM", "n": "021"}, {"t": "your golden hour has found you", "d": "jul 13", "f": ["halcyon"], "dur": "15:06", "id": "924bICbGtQQ", "n": "020"}, {"t": "liminal escapism.", "d": "jul 8", "f": ["halcyon"], "dur": "15:06", "id": "e1HvHS392KY", "n": "019"}, {"t": "liminal july fourth.", "d": "jul 6", "f": ["halcyon"], "dur": "15:06", "id": "XAnbBnis_j0", "n": "018"}, {"t": "liminal hotel.", "d": "jul 1", "f": ["halcyon"], "dur": "15:06", "id": "kKcZLeXYE7g", "n": "017"}, {"t": "liminal recess.", "d": "jun 29", "f": ["halcyon"], "dur": "15:06", "id": "6aH_YAia78U", "n": "016"}, {"t": "turn around.", "d": "jun 24", "f": ["umbra"], "dur": "15:06", "id": "xWAw45QhGg8", "n": "015"}, {"t": "where light goes to die.", "d": "jun 22", "f": ["umbra"], "dur": "15:06", "id": "v5SErqFWhL8", "n": "014"}, {"t": "you won't find anyone.", "d": "jun 17", "f": ["umbra"], "dur": "15:06", "id": "_lAruHc9dsc", "n": "013"}, {"t": "it's up there.", "d": "jun 15", "f": ["umbra"], "dur": "15:06", "id": "tTz8SP6X2zw", "n": "012"}, {"t": "do not go in the water.", "d": "jun 10", "f": ["umbra"], "dur": "15:06", "id": "8modM9xA0x8", "n": "011"}, {"t": "keep driving.", "d": "jun 8", "f": ["umbra"], "dur": "15:06", "id": "DiW0e89j1VQ", "n": "010"}, {"t": "go home.", "d": "jun 3", "f": ["umbra"], "dur": "15:06", "id": "c_t_SNkvoUM", "n": "009"}, {"t": "please do not leave your seat.", "d": "jun 1", "f": ["umbra"], "dur": "30:06", "id": "eXvclw71iBE", "n": "008"}, {"t": "everything is fine.", "d": "may 28", "f": ["umbra"], "dur": "14:22", "id": "yqYHCdiuyLA", "n": "007"}, {"t": "i'm finally free.", "d": "may 25", "f": ["umbra"], "dur": "11:52", "id": "68BBBPpxQQU", "n": "006"}, {"t": "a vehicle in a void that watches back", "d": "apr 18", "f": ["umbra"], "dur": "12:51", "id": "ZzpSw1_IgZA", "n": "005"}, {"t": "the outside never ends", "d": "apr 5", "f": ["umbra"], "dur": "10:08", "id": "Jq5VTR6CXX8", "n": "004"}, {"t": "this isn't outside", "d": "apr 3", "f": ["umbra"], "dur": "8:19", "id": "Mgo2H7cVECI", "n": "003"}, {"t": "this stairwell shouldn't be here", "d": "mar 18", "f": ["umbra"], "dur": "7:57", "id": "NAwlZxmtrOw", "n": "002"}, {"t": "entry 001", "d": "mar 14", "f": ["umbra"], "dur": "8:01", "id": "qviityuPOzg", "n": "001"}];
-const PD={
- all:["the whole system at once.","on youtube: all of orbitone."],
- luna:["the light that stays with you all night.","on youtube: hopecore playlist."],
- mars:["rust, dust, and warm light.","on youtube: liminal autumn playlist."],
- neptune:["the farthest, coldest, deepest blue.","on youtube: dark ambient playlist."],
- saturn:["countless pieces circling together.","on youtube: liminal compilations playlist."],
- halcyon:["a summer you look back on.",""],
- umbra:["the darkest part of the shadow. where orbitone. began.",""]
+const ENTRIES=[{"t": "i think i'll be okay.", "d": "oct 15", "f": ["luna"], "dur": "1:13:50", "id": "kTZVPDBJGQ0", "n": "036"}, {"t": "i am still here.", "d": "oct 12", "f": ["luna"], "dur": "1:09:14", "id": "Zn1qU2PMbUs", "n": "035"}, {"t": "liminal ambient octobercore.", "d": "oct 5", "f": ["mars"], "dur": "15:05", "id": "JpfVmSKiyrg", "n": "034"}, {"t": "liminal septembercore.", "d": "sep 28", "f": ["mars"], "dur": "30:05", "id": "OIN-jn0dNLc", "n": "033"}, {"t": "liminal autumncore.", "d": "sep 21", "f": ["mars", "saturn"], "dur": "1:00:05", "id": "4aezcdh0eLc", "c": "03"}, {"t": "music to shut down your head.", "d": "sep 14", "f": ["neptune"], "dur": "30:05", "id": "M70yBnKQ7VU", "n": "032"}, {"t": "cold sanctuary.", "d": "sep 7", "f": ["neptune", "saturn"], "dur": "1:00:05", "id": "u0LDonfYdKk", "c": "02"}, {"t": "never feeling fulfilled.", "d": "aug 31", "f": ["neptune"], "dur": "30:05", "id": "Mp_94DrafqM", "n": "031"}, {"t": "vanishing point.", "d": "aug 24", "f": ["neptune"], "dur": "30:06", "id": "4P5RAdyfdOs", "n": "030"}, {"t": "sublime.", "d": "aug 17", "f": ["neptune", "saturn"], "dur": "1:00:06", "id": "WprPCCf2tnM", "c": "01"}, {"t": "you're safe here...", "d": "aug 13", "f": ["neptune"], "dur": "15:06", "id": "aNfRMsbnEZM", "n": "029"}, {"t": "this is what escape looks like...", "d": "aug 10", "f": ["neptune"], "dur": "15:06", "id": "hfdJSNS6eR8", "n": "028"}, {"t": "for your endless and heavy nights...", "d": "aug 6", "f": ["neptune"], "dur": "15:06", "id": "xiDwxOylBX0", "n": "027"}, {"t": "please unburden your soul tonight...", "d": "aug 3", "f": ["neptune"], "dur": "15:06", "id": "i3TPLXgozuA", "n": "026"}, {"t": "a room from a dream you forgot", "d": "jul 30", "f": ["iris"], "dur": "15:06", "id": "yi4zqZ7nfsE", "n": "025"}, {"t": "at the edge of the world...", "d": "jul 27", "f": ["iris"], "dur": "15:06", "id": "pb22iiXoq1E", "n": "024"}, {"t": "this hill has been waiting for you", "d": "jul 23", "f": ["iris"], "dur": "15:06", "id": "mo4z6BVFSzg", "n": "023"}, {"t": "you are caught in a snowstorm", "d": "jul 20", "f": ["iris"], "dur": "15:06", "id": "kSMai7zAwX4", "n": "022"}, {"t": "somewhere you've never been", "d": "jul 16", "f": ["iris"], "dur": "15:06", "id": "vDXDXHPDIkM", "n": "021"}, {"t": "your golden hour has found you", "d": "jul 13", "f": ["iris"], "dur": "15:06", "id": "924bICbGtQQ", "n": "020"}, {"t": "liminal escapism.", "d": "jul 8", "f": ["halcyon"], "dur": "15:06", "id": "e1HvHS392KY", "n": "019"}, {"t": "liminal july fourth.", "d": "jul 6", "f": ["halcyon"], "dur": "15:06", "id": "XAnbBnis_j0", "n": "018"}, {"t": "liminal hotel.", "d": "jul 1", "f": ["halcyon"], "dur": "15:06", "id": "kKcZLeXYE7g", "n": "017"}, {"t": "liminal recess.", "d": "jun 29", "f": ["halcyon"], "dur": "15:06", "id": "6aH_YAia78U", "n": "016"}, {"t": "turn around.", "d": "jun 24", "f": ["proteus"], "dur": "15:06", "id": "xWAw45QhGg8", "n": "015"}, {"t": "where light goes to die.", "d": "jun 22", "f": ["proteus"], "dur": "15:06", "id": "v5SErqFWhL8", "n": "014"}, {"t": "you won't find anyone.", "d": "jun 17", "f": ["proteus"], "dur": "15:06", "id": "_lAruHc9dsc", "n": "013"}, {"t": "it's up there.", "d": "jun 15", "f": ["proteus"], "dur": "15:06", "id": "tTz8SP6X2zw", "n": "012"}, {"t": "do not go in the water.", "d": "jun 10", "f": ["proteus"], "dur": "15:06", "id": "8modM9xA0x8", "n": "011"}, {"t": "keep driving.", "d": "jun 8", "f": ["proteus"], "dur": "15:06", "id": "DiW0e89j1VQ", "n": "010"}, {"t": "go home.", "d": "jun 3", "f": ["proteus"], "dur": "15:06", "id": "c_t_SNkvoUM", "n": "009"}, {"t": "please do not leave your seat.", "d": "jun 1", "f": ["proteus"], "dur": "30:06", "id": "eXvclw71iBE", "n": "008"}, {"t": "everything is fine.", "d": "may 28", "f": ["proteus"], "dur": "14:22", "id": "yqYHCdiuyLA", "n": "007"}, {"t": "i'm finally free.", "d": "may 25", "f": ["proteus"], "dur": "11:52", "id": "68BBBPpxQQU", "n": "006"}, {"t": "a vehicle in a void that watches back", "d": "apr 18", "f": ["umbra"], "dur": "12:51", "id": "ZzpSw1_IgZA", "n": "005"}, {"t": "the outside never ends", "d": "apr 5", "f": ["umbra"], "dur": "10:08", "id": "Jq5VTR6CXX8", "n": "004"}, {"t": "this isn't outside", "d": "apr 3", "f": ["umbra"], "dur": "8:19", "id": "Mgo2H7cVECI", "n": "003"}, {"t": "this stairwell shouldn't be here", "d": "mar 18", "f": ["umbra"], "dur": "7:57", "id": "NAwlZxmtrOw", "n": "002"}, {"t": "entry 001", "d": "mar 14", "f": ["umbra"], "dur": "8:01", "id": "qviityuPOzg", "n": "001"}];
+/* the eras: every planet is a chapter of orbitone. (oldest first) */
+const ERA_ORDER=["umbra","proteus","halcyon","iris","neptune","mars","luna"];
+const ERAS={
+ umbra:{l:"the darkest part of the shadow. where orbitone. began."},
+ proteus:{l:"a moon that never kept one shape. night roads, dark water, staircases, the void."},
+ halcyon:{l:"a summer you look back on."},
+ iris:{l:"the messenger who rides the rainbow. golden hours, snowstorms, and places that waited for you."},
+ neptune:{l:"the farthest, coldest, deepest blue."},
+ mars:{l:"rust, dust, and warm light."},
+ luna:{l:"the light that stays with you all night."}
 };
+ERA_ORDER.forEach((k,i)=>{const list=ENTRIES.filter(e=>e.f[0]===k),first=list[list.length-1],last=list[0],now=i===ERA_ORDER.length-1;
+  ERAS[k].n=i+1;ERAS[k].span=!first?"":now?`since ${first.d}`:first===last?first.d:`${first.d} – ${last.d}`;ERAS[k].tag=`era ${i+1} · ${ERAS[k].span}`});
+const eraOf=e=>e.f.find(v=>v!=="saturn")||e.f[0];
+const PD={all:["the whole system at once.",`${ERA_ORDER.length} eras, one orbit.`],saturn:["countless pieces circling together.","the long mixes, from every era."]};
+ERA_ORDER.forEach(k=>PD[k]=[ERAS[k].l,ERAS[k].tag]);
+document.querySelectorAll("[data-era]").forEach(s=>{const z=ERAS[s.dataset.era];if(z)s.textContent=z.tag});
 function setDesc(f){const d=PD[f];document.getElementById("pdesc").innerHTML=`<span>${d[0]}</span>${d[1]?`<em>${d[1]}</em>`:""}`}
 setDesc("all");
 const grid=document.getElementById("grid");
@@ -735,6 +752,8 @@ const PAL={
   saturn:{a:"#d8b56a",b:"#8a6a3a",c:"#fbeacb",bg:["#0d0b07","#2a2416"]},
   halcyon:{a:"#e8a3a0",b:"#9a6a8e",c:"#fde6dc",bg:["#0c090d","#2a1d29"]},
   umbra:{a:"#7a8079",b:"#2f3430",c:"#c9d1c6",bg:["#040505","#121513"]},
+  proteus:{a:"#5ec4bd",b:"#1f4f57",c:"#d6f5f0",bg:["#04080a","#0f2226"]},
+  iris:{a:"#c39af0",b:"#6a4f9a",c:"#f3e6ff",bg:["#09070e","#221a33"]},
   none:{a:"#c99a86",b:"#6e5a78",c:"#f4e2d8",bg:["#08080d","#1d1a28"]}
 };
 function hash(s){let h=2166136261;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
@@ -806,7 +825,7 @@ let orrery={set(){}};
 try{orrery=(()=>{
   const wrap=document.getElementById("orreryWrap"),cv=document.getElementById("orrery"),tip=document.getElementById("tip");
   const ctx=cv.getContext&&cv.getContext("2d");
-  const ORDER=["luna","mars","neptune","halcyon","umbra"],RF={luna:.2,mars:.33,neptune:.48,halcyon:.65,umbra:.84};
+  const ORDER=ERA_ORDER.slice().reverse(),RF={};ORDER.forEach((k,i)=>RF[k]=+(.17+i*(.86-.17)/(ORDER.length-1)).toFixed(3));
   const css=getComputedStyle(document.documentElement);
   const COL={};ORDER.concat(["saturn"]).forEach(k=>COL[k]=css.getPropertyValue("--"+k).trim()||"#ccc");
   const reduce=!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -828,8 +847,8 @@ try{orrery=(()=>{
     const dt=last?Math.min(50,now-last):16;last=now;speed+=(target-speed)*.06;t+=dt*speed;
     const grow=reduce?1:Math.min(1,(now-born)/2200),ease=1-Math.pow(1-grow,3);
     ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
-    ORDER.forEach(cl=>{const rr=R*RF[cl];ctx.beginPath();ctx.ellipse(cx,cy,rr,rr*ys,0,0,Math.PI*2);ctx.strokeStyle="rgba(232,229,240,.09)";ctx.lineWidth=1;ctx.stroke();
-      ctx.font="10px 'JetBrains Mono', monospace";ctx.fillStyle=COL[cl];ctx.globalAlpha=.75;ctx.fillText(cl,cx+rr+6,cy+3);ctx.globalAlpha=1});
+    ORDER.forEach((cl,i)=>{const rr=R*RF[cl];ctx.beginPath();ctx.ellipse(cx,cy,rr,rr*ys,0,0,Math.PI*2);ctx.strokeStyle="rgba(232,229,240,.09)";ctx.lineWidth=1;ctx.stroke();
+      const left=i%2===1;ctx.font="10px 'JetBrains Mono', monospace";ctx.fillStyle=COL[cl];ctx.globalAlpha=.75;ctx.textAlign=left?"right":"left";ctx.fillText(cl,left?cx-rr-6:cx+rr+6,cy+(W<700&&Math.floor(i/2)%2===1?14:3));ctx.textAlign="left";ctx.globalAlpha=1});
     const back=[],front=[];
     bodies.forEach(b=>{const rf=RF[b.cl],w=0.00002/Math.pow(rf,1.5),a=b.a0+(reduce?0:t*w),rr=R*rf*ease;
       b.x=cx+Math.cos(a)*rr;b.y=cy+Math.sin(a)*rr*ys;b.z=Math.sin(a);(b.z<0?back:front).push(b)});
@@ -855,7 +874,7 @@ try{orrery=(()=>{
     if(l+tw>W-8)l=b.x-14-tw;tip.style.left=Math.max(8,l)+"px";tip.style.top=Math.max(8,Math.min(H-th-8,tp))+"px"}
   function show(b){
     const href=b.e.id?`https://www.youtube.com/watch?v=${b.e.id}`:"https://www.youtube.com/@orbitone.mp4/videos";
-    tip.innerHTML=`<strong>${esc(b.e.t)}</strong><span>${b.e.n?`entry ${b.e.n}`:`compilation ${b.e.c}`} · ${b.e.d} · cluster ${b.cl}</span><a href="${href}" target="_blank" rel="noopener">${b.e.soon?"coming soon":"listen ↗"}</a>`;
+    tip.innerHTML=`<strong>${esc(b.e.t)}</strong><span>${b.e.n?`entry ${b.e.n}`:`compilation ${b.e.c}`} · ${b.e.d} · era ${ERAS[b.cl].n} · ${b.cl}</span><a href="${href}" target="_blank" rel="noopener">${b.e.soon?"coming soon":"listen ↗"}</a>`;
     tip.hidden=false;place(b)}
   function pos(ev){const r=cv.getBoundingClientRect();return[ev.clientX-r.left,ev.clientY-r.top]}
   cv.addEventListener("pointermove",ev=>{if(ev.pointerType!=="mouse"||pinned)return;const[x,y]=pos(ev);hover=pick(x,y);
@@ -883,6 +902,8 @@ try{bodyView=(()=>{
     neptune:"the farthest planet from the sun, with the fastest winds of any world we know.",
     saturn:"its rings are ice and rock, from grains of dust to pieces the size of a house.",
     halcyon:"not on any star chart. it only exists in memories you have looooooong forgotten.",
+    proteus:"proteus is one of neptune's moons, too lumpy to ever become round. it's named after a sea god who could change his shape.",
+    iris:"named after the goddess who traveled on rainbows. a real asteroid carries her name, bright enough to see with binoculars.",
     umbra:"the umbra is the part of a shadow where all the light is blocked."
   };
   const renderer=new T.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
@@ -925,10 +946,20 @@ try{bodyView=(()=>{
       return mixc(mixc(hex(0xb9925a),hex(0xedd5a4),(b+1)/2),hex(0x8f6d40),Math.max(0,Math.abs(lat)-1)*.8)}).c},
     halcyon(){return paint((x,y,z)=>{const q=fbm(x*2,y*2,z*2,4),r2=fbm(x*2+q*3,y*2+q*3,z*2,4);
       let c=mixc(hex(0x9a6a8e),hex(0xe8a3a0),r2);c=mixc(c,hex(0xf9dcc4),Math.max(0,(r2-.55)*2.2));return c}).c},
+    proteus(){const p=paint((x,y,z)=>{const n=fbm(x*3+1,y*3,z*3,5),m=fbm(x*7,y*7+4,z*7,3);let c=mixc(hex(0x2c3536),hex(0x5a6866),n);
+        c=mixc(c,hex(0x5ec4bd),Math.max(0,(m-.58)*1.3));return c});
+      const r=rng(23);for(let i=0;i<70;i++){const cx=r()*512,cy=30+r()*196,R=2+Math.pow(r(),3)*26;
+        p.x.beginPath();p.x.arc(cx,cy,R,0,Math.PI*2);p.x.fillStyle="rgba(10,16,17,.22)";p.x.fill();
+        p.x.beginPath();p.x.arc(cx-R*.15,cy-R*.15,R,Math.PI*.9,Math.PI*1.7);p.x.strokeStyle="rgba(190,235,228,.12)";p.x.lineWidth=Math.max(1,R*.14);p.x.stroke()}return p.c},
+    iris(){return paint((x,y,z,lat)=>{const q=fbm(x*1.6,y*1.6,z*1.6,4),w=fbm(x*2+q*2.2,y*2+q*2.2,z*2,4),h=(w*1.6+lat*.18+.62)%1;
+      const a=.42*Math.min(.62,1-.62),f=k=>{const kk=(k+h*12)%12;return .62-a*Math.max(-1,Math.min(kk-3,9-kk,1))};
+      let c=[f(0)*255,f(8)*255,f(4)*255];c=mixc(c,hex(0xc39af0),.38);return mixc(c,[250,244,255],Math.max(0,(q-.6)*1.6))}).c},
     umbra(){return paint((x,y,z)=>{const n=fbm(x*3,y*3,z*3,5),v=fbm(x*9+2,y*9,z*9,2);
       let c=mixc(hex(0x161917),hex(0x3d463f),n);if(v>.6&&n>.42)c=mixc(c,hex(0x93a596),Math.min(.7,(v-.6)*3.5));return c}).c}
   };
-  const GLOW={luna:0xdfe0ea,mars:0xe07a45,neptune:0x6d8cff,saturn:0xd8b56a,halcyon:0xe8a3a0,umbra:0x7a8079};
+  const GLOW={luna:0xdfe0ea,mars:0xe07a45,neptune:0x6d8cff,saturn:0xd8b56a,halcyon:0xe8a3a0,umbra:0x7a8079,proteus:0x5ec4bd,iris:0xc39af0};
+  // proteus is never quite round: a lumpy, shape-shifting moon
+  const lumpy=(x,y,z)=>{const s=1+.3*(fbm(x*1.15+3,y*1.15,z*1.15,3)-.5)+.08*(fbm(x*3.2,y*3.2+7,z*3.2,2)-.5);return[x*s,y*s*.86,z*s]};
   function glowTex(){const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d"),g=x.createRadialGradient(128,128,40,128,128,128);
     g.addColorStop(0,"rgba(255,255,255,.55)");g.addColorStop(.38,"rgba(255,255,255,.22)");g.addColorStop(1,"rgba(255,255,255,0)");x.fillStyle=g;x.fillRect(0,0,256,256);return new T.CanvasTexture(c)}
   const gtex=glowTex(),cache={};
@@ -940,16 +971,18 @@ try{bodyView=(()=>{
   function build(k){
     if(cache[k])return cache[k];
     const g=new T.Group(),tex=new T.CanvasTexture(TEX[k]());
-    const planet=new T.Mesh(new T.SphereGeometry(1,96,64),new T.MeshStandardMaterial({map:tex,roughness:k==="neptune"||k==="saturn"?.75:.95,metalness:0}));
+    const geo=new T.SphereGeometry(1,96,64);
+    if(k==="proteus"){const pa=geo.attributes.position;for(let i=0;i<pa.count;i++){const v=lumpy(pa.getX(i),pa.getY(i),pa.getZ(i));pa.setXYZ(i,v[0],v[1],v[2])}geo.computeVertexNormals()}
+    const planet=new T.Mesh(geo,new T.MeshStandardMaterial({map:tex,roughness:k==="neptune"||k==="saturn"?.75:k==="iris"?.6:.95,metalness:0}));
     const spin=new T.Group();spin.add(planet);g.add(spin);
-    const glow=new T.Sprite(new T.SpriteMaterial({map:gtex,color:GLOW[k],transparent:true,blending:T.AdditiveBlending,depthWrite:false,opacity:k==="luna"?.35:k==="umbra"?.5:.7}));
+    const glow=new T.Sprite(new T.SpriteMaterial({map:gtex,color:GLOW[k],transparent:true,blending:T.AdditiveBlending,depthWrite:false,opacity:k==="luna"?.35:k==="umbra"||k==="proteus"?.5:.7}));
     glow.scale.set(3.2,3.2,1);g.add(glow);
     if(k==="saturn"){const r=ringMesh();spin.add(r);g.rotation.z=.42;g.rotation.x=.32}
     const list=ENTRIES.filter(e=>e.f.includes(k)),marks=[],mr=rng(hash(k)),GA=Math.PI*(3-Math.sqrt(5)),off=mr()*6;
-    const mcol=new T.Color(k==="umbra"?0xd8f0dc:k==="luna"?0xfff3df:0xfff6ea);
+    const mcol=new T.Color(k==="umbra"?0xd8f0dc:k==="proteus"?0xd6fff8:k==="luna"?0xfff3df:0xfff6ea);
     list.forEach((e,i)=>{const y=-.72+1.44*(i+.5)/list.length,rr=Math.sqrt(1-y*y),th=i*GA+off;
       const m=new T.Mesh(new T.SphereGeometry(.03,12,8),new T.MeshBasicMaterial({color:mcol}));
-      m.position.set(Math.cos(th)*rr*1.012,y*1.012,Math.sin(th)*rr*1.012);
+      const sp=k==="proteus"?lumpy(Math.cos(th)*rr,y,Math.sin(th)*rr):[Math.cos(th)*rr,y,Math.sin(th)*rr];m.position.set(sp[0]*1.012,sp[1]*1.012,sp[2]*1.012);
       const halo=new T.Sprite(new T.SpriteMaterial({map:gtex,color:GLOW[k],transparent:true,blending:T.AdditiveBlending,depthWrite:false,opacity:.9}));
       halo.scale.set(.22,.22,1);m.add(halo);m.userData={e,halo};spin.add(m);marks.push(m)});
     g.userData.marks=marks;
@@ -994,8 +1027,9 @@ try{bodyView=(()=>{
     cancelAnimationFrame(raf);run=false;
     if(!k||!TEX[k]){wrap.hidden=true;return}
     wrap.hidden=false;document.getElementById("bodyName").textContent=k;document.getElementById("bodyFact").textContent=FACT[k];
+    document.getElementById("bodyEra").textContent=k==="saturn"?"the long mixes, from every era":ERAS[k]?ERAS[k].tag:"";
     size();if(cur)pivot.remove(cur);cur=build(k);pivot.add(cur);
-    if(k==="umbra"){sun.position.set(-3,.6,-2.2);amb.intensity=.12}else{sun.position.set(-3,1.6,3);amb.intensity=.35}
+    if(k==="umbra"){sun.position.set(-3,.6,-2.2);amb.intensity=.12}else if(k==="proteus"){sun.position.set(-3,1.2,1.1);amb.intensity=.2}else{sun.position.set(-3,1.6,3);amb.intensity=.35}
     hoverM=pinM=null;tipEl.hidden=true;pivot.quaternion.identity();vx=reduce?0:5;vy=0;run=true;raf=requestAnimationFrame(frame);
   }};
 })();}catch(err){document.getElementById("bodyWrap").hidden=true}
@@ -1400,15 +1434,15 @@ try{bodyView=(()=>{
 /* what kind of night is it? */
 (()=>{
   const box=document.getElementById("suggest");if(!box)return;
-  const FEEL={heavy:{c:"luna",l:"the light that stays with you all night."},restless:{c:"neptune",l:"deep, quiet, and far from everything."},nostalgic:{c:"halcyon",l:"a summer you look back on."},cozy:{c:"mars",l:"rust, dust, and warm light."},sleep:{c:"saturn",l:"something long, to keep you company."}};
+  const FEEL={heavy:{w:"heavy",c:"luna",p:["luna","iris"],l:"the light that stays with you all night."},restless:{w:"restless",c:"neptune",p:["neptune"],l:"deep, quiet, and far from everything."},nostalgic:{w:"nostalgic",c:"halcyon",p:["halcyon","iris"],l:"a summer you look back on."},cozy:{w:"cozy",c:"mars",p:["mars"],l:"rust, dust, and warm light."},sleep:{w:"sleepless",c:"saturn",p:["saturn","luna"],l:"something long, to keep you company."}};
   const queues={},lastPick={};let feel=null;
-  function next(c){let q=queues[c];if(!q||!q.length){const p=ENTRIES.filter(e=>e.f.includes(c)&&!e.soon);for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]]}
+  function next(c){let q=queues[c];if(!q||!q.length){const pool=FEEL[c].p,p=ENTRIES.filter(e=>e.f.some(v=>pool.includes(v))&&!e.soon);for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]]}
       if(p.length>1&&p[0]===lastPick[c])p.push(p.shift());q=queues[c]=p}const e=q.shift();lastPick[c]=e;return e}
-  function show(){const F=FEEL[feel],e=next(F.c);if(!e)return;const href=e.id?`https://www.youtube.com/watch?v=${e.id}`:"https://www.youtube.com/@orbitone.mp4/videos";
-    box.innerHTML=`<canvas aria-hidden="true"></canvas><div class="s-copy"><p class="meta">tonight feels like <b style="color:var(--${F.c});font-weight:400">${F.c}</b>.</p><p class="feel-line">${F.l}</p><h3>try ${e.n?`entry ${e.n}`:`compilation ${e.c}`}: ${esc(e.t)}</h3><p class="meta">${e.d}${e.dur?` · ${e.dur}`:""}</p><div class="cta"><a class="btn solid" href="${href}" target="_blank" rel="noopener">listen ↗</a><button class="btn" type="button" id="feelAgain">another one</button><a class="btn" href="#archive" id="feelSee">see cluster ${F.c}</a></div></div>`;
-    box.hidden=false;try{drawArt(box.querySelector("canvas"),e,F.c==="saturn"?"saturn":"all")}catch(err){}
+  function show(){const F=FEEL[feel],e=next(feel),era=e&&eraOf(e);if(!e)return;const href=e.id?`https://www.youtube.com/watch?v=${e.id}`:"https://www.youtube.com/@orbitone.mp4/videos";
+    box.innerHTML=`<canvas aria-hidden="true"></canvas><div class="s-copy"><p class="meta">tonight feels <b style="color:var(--${F.c});font-weight:400">${F.w}</b>.</p><p class="feel-line">${F.l}</p><h3>try ${e.n?`entry ${e.n}`:`compilation ${e.c}`}: ${esc(e.t)}</h3><p class="meta">${e.d}${e.dur?` · ${e.dur}`:""}</p><div class="cta"><a class="btn solid" href="${href}" target="_blank" rel="noopener">listen ↗</a><button class="btn" type="button" id="feelAgain">another one</button><a class="btn" href="#archive" id="feelSee">visit ${era}, era ${ERAS[era]?ERAS[era].n:""}</a></div></div>`;
+    box.hidden=false;try{drawArt(box.querySelector("canvas"),e,"all")}catch(err){}
     document.getElementById("feelAgain").onclick=show;
-    document.getElementById("feelSee").addEventListener("click",()=>{const chip=document.querySelector(`.filters .chip[data-f="${F.c}"]`);if(chip)chip.click()})}
+    document.getElementById("feelSee").addEventListener("click",()=>{const chip=document.querySelector(`.filters .chip[data-f="${era}"]`);if(chip)chip.click()})}
   document.querySelectorAll(".feelings .chip").forEach(b=>b.onclick=()=>{document.querySelectorAll(".feelings .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));feel=b.dataset.feel;show()});
 })();
 
@@ -1500,8 +1534,8 @@ try{bodyView=(()=>{
   const cv=document.getElementById("introCv"),wrap=el.querySelector(".intro-logo"),skip=document.getElementById("introSkip");
   const hero=document.getElementById("heroHome");
   const reduce=!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
-  const css=getComputedStyle(document.documentElement),COL={};["luna","mars","neptune","halcyon","umbra","saturn"].forEach(k=>COL[k]=css.getPropertyValue("--"+k).trim()||"#cccccc");
-  const RING={luna:.2,mars:.33,neptune:.48,halcyon:.65,umbra:.84},T_LOGO=1700,T_LEAVE=3900,FADE=1100,FADE_FAST=500;
+  const css=getComputedStyle(document.documentElement),COL={};ERA_ORDER.concat(["saturn"]).forEach(k=>COL[k]=css.getPropertyValue("--"+k).trim()||"#cccccc");
+  const RING={};ERA_ORDER.slice().reverse().forEach((k,i,a)=>RING[k]=.17+i*(.86-.17)/(a.length-1));const T_LOGO=1700,T_LEAVE=3900,FADE=1100,FADE_FAST=500;
   let raf=0,t0=0,state="idle",timers=[],W=0,H=0,dpr=1,bodies=[],x=null,sprites={};
   // one soft glow per color, drawn once, so every frame stays light and smooth
   function sprite(c){if(sprites[c]!==undefined)return sprites[c];const s=document.createElement("canvas"),n=48;s.width=s.height=n;const g=s.getContext&&s.getContext("2d");if(!g||!/^#[0-9a-f]{6}$/i.test(c))return sprites[c]=null;
