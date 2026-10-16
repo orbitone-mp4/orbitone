@@ -296,8 +296,8 @@ textarea::placeholder{color:var(--muted)}
 .planet-hit{position:absolute;inset:0;z-index:2;border:0;padding:0;margin:0;border-radius:50%;background:transparent;cursor:pointer}
 .planet-gl{position:absolute;left:50%;top:50%;width:220%;height:220%;transform:translate(-50%,-50%);z-index:1;pointer-events:none}
 /* what kind of night is it? */
-.tonight{padding-block:clamp(56px,8vw,96px) 0;position:relative;isolation:isolate}
-.tsky{position:absolute;inset:0 0 -120px;z-index:-1;pointer-events:none;overflow:hidden}
+.tonight{padding-block:clamp(56px,8vw,96px) clamp(40px,6vw,72px);position:relative;isolation:isolate}
+.tsky{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent 100%);mask-image:linear-gradient(180deg,#000 55%,transparent 100%)}
 .tsky i{position:absolute;inset:0;opacity:0;transition:opacity 1.8s ease}
 .tsky i.on{opacity:1}
 .tsky::after{content:"";position:absolute;inset:0;background:radial-gradient(1px 1px at 12% 30%,rgba(232,229,240,.5),transparent),radial-gradient(1px 1px at 33% 12%,rgba(232,229,240,.4),transparent),radial-gradient(1px 1px at 58% 26%,rgba(232,229,240,.45),transparent),radial-gradient(1px 1px at 81% 16%,rgba(232,229,240,.4),transparent),radial-gradient(1px 1px at 91% 44%,rgba(232,229,240,.35),transparent),radial-gradient(1px 1px at 4% 62%,rgba(232,229,240,.3),transparent);opacity:0;transition:opacity 1.8s ease}
@@ -687,9 +687,9 @@ footer strong{color:var(--ink);font-weight:400}
       <ul class="legend">
           <li><i class="dot" style="--c:var(--all)"></i><b>sol</b><span>the center of everything. every entry orbits here.</span><a href="#archive" data-visit="all">visit the orbit →</a></li>
           <li><i class="dot" style="--c:var(--umbra)"></i><b>umbra<small data-era="umbra"></small></b><span>the darkest part of the shadow. where orbitone. began.</span><a href="#archive" data-visit="umbra">visit umbra →</a></li>
-          <li><i class="dot" style="--c:var(--proteus)"></i><b>proteus<small data-era="proteus"></small></b><span>a moon that never kept one shape. night roads, dark water, staircases, the void.</span><a href="#archive" data-visit="proteus">visit proteus →</a></li>
+          <li><i class="dot" style="--c:var(--proteus)"></i><b>proteus<small data-era="proteus"></small></b><span>a moon that never kept one shape.</span><a href="#archive" data-visit="proteus">visit proteus →</a></li>
           <li><i class="dot" style="--c:var(--halcyon)"></i><b>halcyon<small data-era="halcyon"></small></b><span>not on any star chart. it only exists in memories you have looooooong forgotten.</span><a href="#archive" data-visit="halcyon">visit halcyon →</a></li>
-          <li><i class="dot" style="--c:var(--iris)"></i><b>iris<small data-era="iris"></small></b><span>the messenger who rides the rainbow. golden hours, snowstorms, and places that waited for you.</span><a href="#archive" data-visit="iris">visit iris →</a></li>
+          <li><i class="dot" style="--c:var(--iris)"></i><b>iris<small data-era="iris"></small></b><span>the messenger who rides the rainbow.</span><a href="#archive" data-visit="iris">visit iris →</a></li>
           <li><i class="dot" style="--c:var(--neptune)"></i><b>neptune<small data-era="neptune"></small></b><span>the farthest, coldest, deepest blue.</span><a href="#archive" data-visit="neptune">visit neptune →</a></li>
           <li><i class="dot" style="--c:var(--mars)"></i><b>mars<small data-era="mars"></small></b><span>rust, dust, and warm light.</span><a href="#archive" data-visit="mars">visit mars →</a></li>
           <li><i class="dot" style="--c:var(--luna)"></i><b>luna<small data-era="luna"></small></b><span>the light that stays with you all night.</span><a href="#archive" data-visit="luna">visit luna →</a></li>
@@ -740,9 +740,9 @@ const ENTRIES=[{"t": "i think i'll be okay.", "d": "oct 15", "f": ["luna"], "dur
 const ERA_ORDER=["umbra","proteus","halcyon","iris","neptune","mars","luna"];
 const ERAS={
  umbra:{l:"the darkest part of the shadow. where orbitone. began."},
- proteus:{l:"a moon that never kept one shape. night roads, dark water, staircases, the void."},
+ proteus:{l:"a moon that never kept one shape."},
  halcyon:{l:"a summer you look back on."},
- iris:{l:"the messenger who rides the rainbow. golden hours, snowstorms, and places that waited for you."},
+ iris:{l:"the messenger who rides the rainbow."},
  neptune:{l:"the farthest, coldest, deepest blue."},
  mars:{l:"rust, dust, and warm light."},
  luna:{l:"the light that stays with you all night."}
