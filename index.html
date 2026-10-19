@@ -57,6 +57,22 @@ a{color:inherit}
 .meta{font-family:var(--f-meta);font-size:12px;letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}
 .glitch{text-shadow:-2px 0 var(--red),2px 0 var(--blue)}
 
+/* color: a planet-tinted haze behind the whole page. the archive's era filter changes it */
+@property --wash{syntax:"<color>";inherits:true;initial-value:#c39af0}
+@property --wash2{syntax:"<color>";inherits:true;initial-value:#5ec4bd}
+@property --ac{syntax:"<color>";inherits:true;initial-value:#fde6c4}
+body{--wash:#c39af0;--wash2:#5ec4bd;--ac:#fde6c4;transition:--wash 1.4s ease,--wash2 1.4s ease,--ac 1.4s ease;background:transparent}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60vmax 42vmax at 88% 12%,color-mix(in srgb,var(--wash) 12%,transparent),transparent 70%),radial-gradient(55vmax 40vmax at 6% 88%,color-mix(in srgb,var(--wash2) 10%,transparent),transparent 70%),radial-gradient(40vmax 30vmax at 50% 50%,color-mix(in srgb,var(--wash) 4%,transparent),transparent 70%)}
+.head h2{color:color-mix(in srgb,var(--ac) 45%,var(--ink))}
+.head h2::after{content:"";display:block;width:72px;height:2px;margin-top:12px;border-radius:2px;background:linear-gradient(90deg,var(--umbra),var(--proteus),var(--halcyon),var(--iris),var(--neptune),var(--mars),var(--luna));opacity:.85}
+.btn{border-color:color-mix(in srgb,var(--ac) 50%,transparent);color:var(--ac)}
+.btn.solid{background:var(--ac);border-color:var(--ac);color:var(--void)}
+.btn.solid:hover{background:color-mix(in srgb,var(--ac) 80%,#fff)}
+.logo.prism{background:linear-gradient(90deg,var(--glow),var(--halcyon),var(--iris),var(--neptune),var(--proteus),var(--saturn),var(--mars),var(--glow)) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(-2px 0 rgba(255,61,94,.45)) drop-shadow(2px 0 rgba(65,112,255,.45));animation:prism 24s linear infinite}
+@keyframes prism{to{background-position:300% 0}}
+footer{border-top:0;position:relative}
+footer::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--umbra),var(--proteus),var(--halcyon),var(--iris),var(--neptune),var(--mars),var(--luna),transparent);opacity:.6}
+
 /* top bar */
 .bar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:20px;position:relative;z-index:2}
 .bar .pixel{font-size:13px}
@@ -92,6 +108,15 @@ section{padding-block:clamp(64px,9vw,110px)}
 .chip .era-n{opacity:.55;margin-right:-2px}
 .chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-meta);font-size:12px;padding:8px 12px;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;cursor:pointer}
 .chip[aria-pressed="true"]{color:var(--void);background:var(--ink);border-color:var(--ink)}
+.filters .chip{transition:background .5s ease,border-color .5s ease,color .5s ease,box-shadow .5s ease}
+.filters .chip:hover{border-color:color-mix(in srgb,var(--cc,var(--ink)) 60%,transparent);color:var(--ink)}
+.filters .chip[aria-pressed="true"]{background:var(--cc,var(--ink));border-color:var(--cc,var(--ink));box-shadow:0 0 18px -4px var(--cc,var(--ink))}
+.filters .chip[aria-pressed="true"] .dot{background:var(--void);box-shadow:none}
+.entry .plate{transition:box-shadow .5s ease}
+.entry:hover .plate{box-shadow:0 0 0 1px color-mix(in srgb,var(--ec,var(--glow)) 55%,transparent),0 14px 40px -14px color-mix(in srgb,var(--ec,var(--glow)) 80%,transparent)}
+.entry h3{transition:color .4s ease}
+.entry:hover h3{color:color-mix(in srgb,var(--ec,var(--glow)) 60%,var(--ink))}
+.entry .meta span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:8px;vertical-align:1px;background:var(--ec,var(--muted));box-shadow:0 0 6px var(--ec,transparent)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:28px 22px}
 .entry{display:grid;gap:10px;text-decoration:none;min-width:0}
 .plate{position:relative;aspect-ratio:16/9;max-width:100%;overflow:hidden;border-radius:2px;background:var(--night)}
@@ -117,6 +142,31 @@ section{padding-block:clamp(64px,9vw,110px)}
 .room-card p{margin:0 0 14px;max-width:46ch}
 .mini-orb{justify-self:center;width:min(260px,70vw);aspect-ratio:1;max-width:100%;border-radius:50%;background:radial-gradient(circle at 35% 70%,rgba(242,169,107,.55),rgba(38,44,66,.2) 55%,transparent 70%),radial-gradient(circle at 60% 40%,#14161e,#050507 72%);box-shadow:0 0 60px -10px rgba(242,169,107,.35);animation:breathe 10s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:scale(.94)}50%{transform:scale(1.04)}}
+/* breath room planet: its glow follows the chosen pattern */
+@property --bo{syntax:"<color>";inherits:true;initial-value:#f2a96b}
+#breath,#boverlay{--bo:#f2a96b;transition:--bo 1.6s ease}
+#breath[data-p="box"],#boverlay[data-p="box"]{--bo:#5ec4bd}
+#breath[data-p="478"],#boverlay[data-p="478"]{--bo:#c39af0}
+.breath-orb{background:radial-gradient(circle at 35% 70%,color-mix(in srgb,var(--bo) 58%,transparent),rgba(38,44,66,.2) 55%,transparent 70%),radial-gradient(circle at 60% 40%,#14161e,#050507 72%);box-shadow:0 0 60px -10px color-mix(in srgb,var(--bo) 40%,transparent);animation-duration:var(--bdur,10s)}
+.borb{background:radial-gradient(circle at 35% 70%,color-mix(in srgb,var(--bo) 65%,transparent),rgba(109,114,216,.22) 55%,transparent 72%),radial-gradient(circle at 60% 40%,#1a1d2a,#050507 72%)!important;box-shadow:0 0 70px -10px color-mix(in srgb,var(--bo) 45%,transparent)!important}
+.borb.big{box-shadow:0 0 110px 0 color-mix(in srgb,var(--bo) 55%,transparent)!important}
+/* quiet room lantern */
+.mini-lantern{justify-self:center;position:relative;width:min(260px,70vw);aspect-ratio:1;display:grid;justify-items:center;align-content:start}
+.mini-lantern .halo{position:absolute;left:50%;top:58%;width:120%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,176,92,.30),rgba(255,150,70,.08) 40%,transparent 66%);animation:lflick 4.2s ease-in-out infinite}
+.mini-lantern .hang{position:relative;display:grid;justify-items:center;transform-origin:50% 0;animation:lsway 7s ease-in-out infinite}
+.mini-lantern .string{width:1.5px;height:56px;background:linear-gradient(#000,rgba(253,230,196,.35))}
+.mini-lantern .cap{width:46px;height:9px;border-radius:3px 3px 1px 1px;background:linear-gradient(#3a2a1a,#1c140c)}
+.mini-lantern .body{position:relative;width:96px;height:118px;border-radius:44% 44% 40% 40%/30% 30% 30% 30%;background:radial-gradient(ellipse at 50% 55%,#fff1cf 0%,#ffcd84 30%,#f29a4a 68%,#b45a28 100%);box-shadow:0 0 50px 6px rgba(255,170,80,.45),inset 0 -10px 22px rgba(120,50,15,.45);animation:lglow 4.2s ease-in-out infinite;overflow:hidden}
+.mini-lantern .body::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0 17px,rgba(120,55,20,.28) 17px 19px)}
+.mini-lantern .body::after{content:"";position:absolute;inset:0 30%;border-left:1px solid rgba(120,55,20,.22);border-right:1px solid rgba(120,55,20,.22);border-radius:40%}
+.mini-lantern .base{width:40px;height:8px;border-radius:1px 1px 3px 3px;background:linear-gradient(#1c140c,#3a2a1a)}
+.mini-lantern .tassel{width:2px;height:22px;background:linear-gradient(#c86a3a,transparent)}
+@keyframes lsway{0%,100%{transform:rotate(-2.2deg)}50%{transform:rotate(2.2deg)}}
+@keyframes lglow{0%,100%{filter:brightness(1)}45%{filter:brightness(1.08)}55%{filter:brightness(.94)}70%{filter:brightness(1.05)}}
+@keyframes lflick{0%,100%{opacity:.9}50%{opacity:1}62%{opacity:.8}}
+@media (prefers-reduced-motion:reduce){.mini-lantern .hang,.mini-lantern .body,.mini-lantern .halo,.breath-orb{animation:none}}
+@media (max-width:700px){#breath .room-card .breath-orb{width:min(200px,60vw)}}
+
 
 /* overlay */
 .overlay{position:fixed;inset:0;z-index:50;background:radial-gradient(ellipse at 50% 120%,rgba(242,169,107,.28),transparent 60%),var(--void);display:grid;place-items:center;padding:max(24px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));opacity:0;transition:opacity 2.4s ease}
@@ -312,6 +362,12 @@ textarea::placeholder{color:var(--muted)}
 .s-copy .cta{justify-content:flex-start;margin-top:6px}
 @media (max-width:600px){.suggest{grid-template-columns:minmax(0,1fr)}}
 /* about */
+.since{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:6px}
+.since-tile{display:grid;gap:4px;padding:16px;border:1px solid var(--line);border-radius:2px;background:color-mix(in srgb,var(--glow) 4%,transparent)}
+.since-n{font-size:clamp(30px,6vw,44px);font-weight:400;line-height:1;color:var(--glow);text-shadow:0 0 18px color-mix(in srgb,var(--glow) 45%,transparent);font-variant-numeric:tabular-nums}
+.since-tile span{color:var(--ink);font-size:15px}
+.since-tile small{font-size:11px}
+@media (max-width:480px){.since{grid-template-columns:minmax(0,1fr)}}
 .about{padding-block:clamp(48px,7vw,90px)}
 .about-body{display:grid;gap:28px;max-width:62ch}
 .about-block h3,.legend-title{font-family:var(--f-pixel);font-weight:400;font-size:13px;letter-spacing:.24em;margin:0 0 8px;color:var(--ink)}
@@ -322,10 +378,11 @@ textarea::placeholder{color:var(--muted)}
 .legend li{display:grid;grid-template-columns:14px 172px minmax(0,1fr) auto;gap:14px;align-items:baseline;padding-block:14px;border-top:1px solid var(--line)}
 .legend li:last-child{border-bottom:1px solid var(--line)}
 .legend .dot{align-self:center}
-.legend b{font-weight:400;font-family:var(--f-meta);font-size:13px;letter-spacing:.06em}
+.legend b{color:var(--c);font-weight:400;font-family:var(--f-meta);font-size:13px;letter-spacing:.06em}
 .legend b small{display:block;margin-top:3px;font-size:11px;letter-spacing:.02em;color:var(--muted);white-space:nowrap}
 .legend-sub{margin:6px 0 0;font-style:italic;font-weight:300;color:var(--muted)}
 .legend span{font-style:italic;font-weight:300;color:var(--glow)}
+.legend .lore{display:block;margin-top:6px;font-family:var(--f-meta);font-style:normal;font-size:11px;letter-spacing:.04em;line-height:1.5;color:var(--muted)}
 .legend a{font-family:var(--f-meta);font-size:12px;color:var(--muted);text-decoration:none;white-space:nowrap}
 .legend a:hover{color:var(--ink)}
 @media (max-width:600px){.legend li{grid-template-columns:14px minmax(0,1fr) auto}.legend a{grid-column:3;grid-row:1}.legend span{grid-column:2/4;grid-row:2}}
@@ -378,9 +435,8 @@ footer strong{color:var(--ink);font-weight:400}
     <div class="bar">
       <span class="pixel glitch">orbitone.</span>
       <nav aria-label="sections">
-        <a href="#archive">the archive</a>
+        <a href="#home">home</a>
         <a href="#rooms">the rooms</a>
-        <a href="#letgo">leave it here</a>
         <a href="#about">about</a>
       </nav>
     </div>
@@ -402,9 +458,8 @@ footer strong{color:var(--ink);font-weight:400}
     <div class="bar">
       <a class="pixel glitch home" href="#home">orbitone.</a>
       <nav aria-label="sections">
-        <a href="#archive">the archive</a>
+        <a href="#home">home</a>
         <a href="#rooms">the rooms</a>
-        <a href="#letgo">leave it here</a>
         <a href="#about">about</a>
       </nav>
     </div>
@@ -538,7 +593,7 @@ footer strong{color:var(--ink);font-weight:400}
           <button class="btn solid" id="enterRoom2" type="button">stay a while</button>
         </div>
       </div>
-      <div class="mini-orb" aria-hidden="true"></div>
+      <div class="mini-lantern" aria-hidden="true"><span class="halo"></span><span class="hang"><span class="string"></span><span class="cap"></span><span class="body"></span><span class="base"></span><span class="tassel"></span></span></div>
     </div>
   </section>
 
@@ -613,20 +668,23 @@ footer strong{color:var(--ink);font-weight:400}
     </div>
   </section>
 
-  <section id="breath">
-    <div class="wrap">
-      <div class="head">
-        <h2>the breath room</h2>
-        <p>breathe with the planet. in as it grows, out as it fades.</p>
-      </div>
-      <div class="controls">
-        <div class="bpat" role="group" aria-label="breathing pattern" id="bpat">
-          <button class="chip" type="button" data-p="slow" aria-pressed="true">slow · 5 in, 5 out</button>
-          <button class="chip" type="button" data-p="box" aria-pressed="false">box · 4, 4, 4, 4</button>
-          <button class="chip" type="button" data-p="478" aria-pressed="false">4 · 7 · 8</button>
+  <section id="breath" data-p="slow">
+    <div class="wrap room-card">
+      <div>
+        <div class="head">
+          <h2>the breath room</h2>
+          <p>breathe with the planet. in as it grows, out as it fades.</p>
         </div>
-        <div class="cta" style="justify-content:flex-start"><button class="btn solid" id="bgo" type="button">begin</button></div>
+        <div class="controls">
+          <div class="bpat" role="group" aria-label="breathing pattern" id="bpat">
+            <button class="chip" type="button" data-p="slow" aria-pressed="true">slow · 5 in, 5 out</button>
+            <button class="chip" type="button" data-p="box" aria-pressed="false">box · 4, 4, 4, 4</button>
+            <button class="chip" type="button" data-p="478" aria-pressed="false">4 · 7 · 8</button>
+          </div>
+          <div class="cta" style="justify-content:flex-start"><button class="btn solid" id="bgo" type="button">begin</button></div>
+        </div>
       </div>
+      <div class="mini-orb breath-orb" aria-hidden="true"></div>
     </div>
   </section>
 
@@ -680,20 +738,25 @@ footer strong{color:var(--ink);font-weight:400}
       <div class="about-body">
         <div class="about-block"><h3>what this is</h3><p>orbitone. is a liminal ambient channel made to help hurting people rest. nothing here asks anything of you. stay as long as you need.</p></div>
         <div class="about-block"><h3>made by hand</h3><p>every track is made by hand in fl studio. no ai music, ever.</p></div>
+        <div class="about-block"><h3>how long i've been here</h3>
+          <div class="since">
+            <div class="since-tile"><b class="since-n pixel" data-since="2026-03-12">—</b><span>days since orbitone. began</span><small class="meta">since march 12, 2026</small></div>
+            <div class="since-tile"><b class="since-n pixel" data-since="2026-10-15">—</b><span>days this little corner has been open</span><small class="meta">since october 15, 2026</small></div>
+          </div></div>
         <div class="about-block"><h3>entries &amp; compilations</h3><p>every video is an entry, numbered from 001. compilations 01 to 03 are the long mixes from before every entry became an hour long.</p></div>
       </div>
       <h3 class="legend-title">the solar system</h3>
       <p class="legend-sub">every planet is an era of orbitone., from the first entry to now.</p>
       <ul class="legend">
-          <li><i class="dot" style="--c:var(--all)"></i><b>sol</b><span>the center of everything. every entry orbits here.</span><a href="#archive" data-visit="all">visit the orbit →</a></li>
-          <li><i class="dot" style="--c:var(--umbra)"></i><b>umbra<small data-era="umbra"></small></b><span>the darkest part of the shadow. where orbitone. began.</span><a href="#archive" data-visit="umbra">visit umbra →</a></li>
-          <li><i class="dot" style="--c:var(--proteus)"></i><b>proteus<small data-era="proteus"></small></b><span>a moon that never kept one shape.</span><a href="#archive" data-visit="proteus">visit proteus →</a></li>
-          <li><i class="dot" style="--c:var(--halcyon)"></i><b>halcyon<small data-era="halcyon"></small></b><span>not on any star chart. it only exists in memories you have looooooong forgotten.</span><a href="#archive" data-visit="halcyon">visit halcyon →</a></li>
-          <li><i class="dot" style="--c:var(--iris)"></i><b>iris<small data-era="iris"></small></b><span>the messenger who rides the rainbow.</span><a href="#archive" data-visit="iris">visit iris →</a></li>
-          <li><i class="dot" style="--c:var(--neptune)"></i><b>neptune<small data-era="neptune"></small></b><span>the farthest, coldest, deepest blue.</span><a href="#archive" data-visit="neptune">visit neptune →</a></li>
-          <li><i class="dot" style="--c:var(--mars)"></i><b>mars<small data-era="mars"></small></b><span>rust, dust, and warm light.</span><a href="#archive" data-visit="mars">visit mars →</a></li>
-          <li><i class="dot" style="--c:var(--luna)"></i><b>luna<small data-era="luna"></small></b><span>the light that stays with you all night.</span><a href="#archive" data-visit="luna">visit luna →</a></li>
-          <li><i class="dot" style="--c:var(--saturn)"></i><b>saturn<small>the long mixes</small></b><span>countless pieces circling together.</span><a href="#archive" data-visit="saturn">visit saturn →</a></li>
+          <li style="--c:var(--all)"><i class="dot"></i><b>sol</b><span>the center of everything. every entry orbits here.</span><a href="#archive" data-visit="all">visit the orbit →</a></li>
+          <li style="--c:var(--umbra)"><i class="dot"></i><b>umbra<small data-era="umbra"></small></b><span>the darkest part of the shadow. where orbitone. began.<small class="lore">the brief eclipsing · mar 13, 1:39 pm → mar 14, 1:40 am. orbitone. went dark for twelve hours, then came back and posted its first entry.</small></span><a href="#archive" data-visit="umbra">visit umbra →</a></li>
+          <li style="--c:var(--proteus)"><i class="dot"></i><b>proteus<small data-era="proteus"></small></b><span>a moon that never kept one shape.</span><a href="#archive" data-visit="proteus">visit proteus →</a></li>
+          <li style="--c:var(--halcyon)"><i class="dot"></i><b>halcyon<small data-era="halcyon"></small></b><span>not on any star chart. it only exists in memories you have looooooong forgotten.</span><a href="#archive" data-visit="halcyon">visit halcyon →</a></li>
+          <li style="--c:var(--iris)"><i class="dot"></i><b>iris<small data-era="iris"></small></b><span>the messenger who rides the rainbow.</span><a href="#archive" data-visit="iris">visit iris →</a></li>
+          <li style="--c:var(--neptune)"><i class="dot"></i><b>neptune<small data-era="neptune"></small></b><span>the farthest, coldest, deepest blue.</span><a href="#archive" data-visit="neptune">visit neptune →</a></li>
+          <li style="--c:var(--mars)"><i class="dot"></i><b>mars<small data-era="mars"></small></b><span>rust, dust, and warm light.</span><a href="#archive" data-visit="mars">visit mars →</a></li>
+          <li style="--c:var(--luna)"><i class="dot"></i><b>luna<small data-era="luna"></small></b><span>the light that stays with you all night.</span><a href="#archive" data-visit="luna">visit luna →</a></li>
+          <li style="--c:var(--saturn)"><i class="dot"></i><b>saturn<small>the long mixes</small></b><span>countless pieces circling together.</span><a href="#archive" data-visit="saturn">visit saturn →</a></li>
       </ul>
       <div class="about-body" style="margin-top:44px">
         <div class="about-block"><h3>find orbitone.</h3><p><a href="https://www.youtube.com/@orbitone.mp4" target="_blank" rel="noopener">youtube.com/@orbitone.mp4</a></p></div>
@@ -709,6 +772,7 @@ footer strong{color:var(--ink);font-weight:400}
     <span class="pixel glitch">orbitone.</span>
     <p>every track is made by hand in fl studio. no ai music, ever.</p>
     <p><strong>if tonight is heavier than rest can fix,</strong> please reach out to someone. in the us, call or text <a href="https://988lifeline.org" target="_blank" rel="noopener">988</a>. anywhere else, <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a> lists free lines near you.</p>
+    <p class="meta since-foot">orbiting for <span data-since="2026-03-12">—</span> days. this corner has been open for <span data-since="2026-10-15">—</span>.</p>
     <p class="meta"><a href="https://www.youtube.com/@orbitone.mp4" target="_blank" rel="noopener">youtube.com/@orbitone.mp4</a></p>
   </div>
 </footer>
@@ -735,7 +799,8 @@ footer strong{color:var(--ink);font-weight:400}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-const ENTRIES=[{"t": "i think i'll be okay.", "d": "oct 15", "f": ["luna"], "dur": "1:13:50", "id": "kTZVPDBJGQ0", "n": "036"}, {"t": "i am still here.", "d": "oct 12", "f": ["luna"], "dur": "1:09:14", "id": "Zn1qU2PMbUs", "n": "035"}, {"t": "liminal ambient octobercore.", "d": "oct 5", "f": ["mars"], "dur": "15:05", "id": "JpfVmSKiyrg", "n": "034"}, {"t": "liminal septembercore.", "d": "sep 28", "f": ["mars"], "dur": "30:05", "id": "OIN-jn0dNLc", "n": "033"}, {"t": "liminal autumncore.", "d": "sep 21", "f": ["mars", "saturn"], "dur": "1:00:05", "id": "4aezcdh0eLc", "c": "03"}, {"t": "music to shut down your head.", "d": "sep 14", "f": ["neptune"], "dur": "30:05", "id": "M70yBnKQ7VU", "n": "032"}, {"t": "cold sanctuary.", "d": "sep 7", "f": ["neptune", "saturn"], "dur": "1:00:05", "id": "u0LDonfYdKk", "c": "02"}, {"t": "never feeling fulfilled.", "d": "aug 31", "f": ["neptune"], "dur": "30:05", "id": "Mp_94DrafqM", "n": "031"}, {"t": "vanishing point.", "d": "aug 24", "f": ["neptune"], "dur": "30:06", "id": "4P5RAdyfdOs", "n": "030"}, {"t": "sublime.", "d": "aug 17", "f": ["neptune", "saturn"], "dur": "1:00:06", "id": "WprPCCf2tnM", "c": "01"}, {"t": "you're safe here...", "d": "aug 13", "f": ["neptune"], "dur": "15:06", "id": "aNfRMsbnEZM", "n": "029"}, {"t": "this is what escape looks like...", "d": "aug 10", "f": ["neptune"], "dur": "15:06", "id": "hfdJSNS6eR8", "n": "028"}, {"t": "for your endless and heavy nights...", "d": "aug 6", "f": ["neptune"], "dur": "15:06", "id": "xiDwxOylBX0", "n": "027"}, {"t": "please unburden your soul tonight...", "d": "aug 3", "f": ["neptune"], "dur": "15:06", "id": "i3TPLXgozuA", "n": "026"}, {"t": "a room from a dream you forgot", "d": "jul 30", "f": ["iris"], "dur": "15:06", "id": "yi4zqZ7nfsE", "n": "025"}, {"t": "at the edge of the world...", "d": "jul 27", "f": ["iris"], "dur": "15:06", "id": "pb22iiXoq1E", "n": "024"}, {"t": "this hill has been waiting for you", "d": "jul 23", "f": ["iris"], "dur": "15:06", "id": "mo4z6BVFSzg", "n": "023"}, {"t": "you are caught in a snowstorm", "d": "jul 20", "f": ["iris"], "dur": "15:06", "id": "kSMai7zAwX4", "n": "022"}, {"t": "somewhere you've never been", "d": "jul 16", "f": ["iris"], "dur": "15:06", "id": "vDXDXHPDIkM", "n": "021"}, {"t": "your golden hour has found you", "d": "jul 13", "f": ["iris"], "dur": "15:06", "id": "924bICbGtQQ", "n": "020"}, {"t": "liminal escapism.", "d": "jul 8", "f": ["halcyon"], "dur": "15:06", "id": "e1HvHS392KY", "n": "019"}, {"t": "liminal july fourth.", "d": "jul 6", "f": ["halcyon"], "dur": "15:06", "id": "XAnbBnis_j0", "n": "018"}, {"t": "liminal hotel.", "d": "jul 1", "f": ["halcyon"], "dur": "15:06", "id": "kKcZLeXYE7g", "n": "017"}, {"t": "liminal recess.", "d": "jun 29", "f": ["halcyon"], "dur": "15:06", "id": "6aH_YAia78U", "n": "016"}, {"t": "turn around.", "d": "jun 24", "f": ["proteus"], "dur": "15:06", "id": "xWAw45QhGg8", "n": "015"}, {"t": "where light goes to die.", "d": "jun 22", "f": ["proteus"], "dur": "15:06", "id": "v5SErqFWhL8", "n": "014"}, {"t": "you won't find anyone.", "d": "jun 17", "f": ["proteus"], "dur": "15:06", "id": "_lAruHc9dsc", "n": "013"}, {"t": "it's up there.", "d": "jun 15", "f": ["proteus"], "dur": "15:06", "id": "tTz8SP6X2zw", "n": "012"}, {"t": "do not go in the water.", "d": "jun 10", "f": ["proteus"], "dur": "15:06", "id": "8modM9xA0x8", "n": "011"}, {"t": "keep driving.", "d": "jun 8", "f": ["proteus"], "dur": "15:06", "id": "DiW0e89j1VQ", "n": "010"}, {"t": "go home.", "d": "jun 3", "f": ["proteus"], "dur": "15:06", "id": "c_t_SNkvoUM", "n": "009"}, {"t": "please do not leave your seat.", "d": "jun 1", "f": ["proteus"], "dur": "30:06", "id": "eXvclw71iBE", "n": "008"}, {"t": "everything is fine.", "d": "may 28", "f": ["proteus"], "dur": "14:22", "id": "yqYHCdiuyLA", "n": "007"}, {"t": "i'm finally free.", "d": "may 25", "f": ["proteus"], "dur": "11:52", "id": "68BBBPpxQQU", "n": "006"}, {"t": "a vehicle in a void that watches back", "d": "apr 18", "f": ["umbra"], "dur": "12:51", "id": "ZzpSw1_IgZA", "n": "005"}, {"t": "the outside never ends", "d": "apr 5", "f": ["umbra"], "dur": "10:08", "id": "Jq5VTR6CXX8", "n": "004"}, {"t": "this isn't outside", "d": "apr 3", "f": ["umbra"], "dur": "8:19", "id": "Mgo2H7cVECI", "n": "003"}, {"t": "this stairwell shouldn't be here", "d": "mar 18", "f": ["umbra"], "dur": "7:57", "id": "NAwlZxmtrOw", "n": "002"}, {"t": "entry 001", "d": "mar 14", "f": ["umbra"], "dur": "8:01", "id": "qviityuPOzg", "n": "001"}];
+/* entries: t = the title shown on the site (just the gentle line, no "✦ liminal …"); p = the place, used only to pick the card art */
+const ENTRIES=[{"t": "it will pass.", "p": "hotel", "d": "oct 19", "f": ["luna"], "dur": "1:17:19", "id": "CCfkZJWMk80", "n": "038"}, {"t": "better days ahead.", "p": "autumncore", "d": "oct 17", "f": ["luna"], "dur": "1:01:34", "id": "1_1ucTcOhnk", "n": "037"}, {"t": "i think i'll be okay.", "d": "oct 15", "f": ["luna"], "dur": "1:13:50", "id": "kTZVPDBJGQ0", "n": "036"}, {"t": "i am still here.", "d": "oct 12", "f": ["luna"], "dur": "1:09:14", "id": "Zn1qU2PMbUs", "n": "035"}, {"t": "liminal ambient octobercore.", "d": "oct 5", "f": ["mars"], "dur": "15:05", "id": "JpfVmSKiyrg", "n": "034"}, {"t": "liminal septembercore.", "d": "sep 28", "f": ["mars"], "dur": "30:05", "id": "OIN-jn0dNLc", "n": "033"}, {"t": "liminal autumncore.", "d": "sep 21", "f": ["mars", "saturn"], "dur": "1:00:05", "id": "4aezcdh0eLc", "c": "03"}, {"t": "music to shut down your head.", "d": "sep 14", "f": ["neptune"], "dur": "30:05", "id": "M70yBnKQ7VU", "n": "032"}, {"t": "cold sanctuary.", "d": "sep 7", "f": ["neptune", "saturn"], "dur": "1:00:05", "id": "u0LDonfYdKk", "c": "02"}, {"t": "never feeling fulfilled.", "d": "aug 31", "f": ["neptune"], "dur": "30:05", "id": "Mp_94DrafqM", "n": "031"}, {"t": "vanishing point.", "d": "aug 24", "f": ["neptune"], "dur": "30:06", "id": "4P5RAdyfdOs", "n": "030"}, {"t": "sublime.", "d": "aug 17", "f": ["neptune", "saturn"], "dur": "1:00:06", "id": "WprPCCf2tnM", "c": "01"}, {"t": "you're safe here...", "d": "aug 13", "f": ["neptune"], "dur": "15:06", "id": "aNfRMsbnEZM", "n": "029"}, {"t": "this is what escape looks like...", "d": "aug 10", "f": ["neptune"], "dur": "15:06", "id": "hfdJSNS6eR8", "n": "028"}, {"t": "for your endless and heavy nights...", "d": "aug 6", "f": ["neptune"], "dur": "15:06", "id": "xiDwxOylBX0", "n": "027"}, {"t": "please unburden your soul tonight...", "d": "aug 3", "f": ["neptune"], "dur": "15:06", "id": "i3TPLXgozuA", "n": "026"}, {"t": "a room from a dream you forgot", "d": "jul 30", "f": ["iris"], "dur": "15:06", "id": "yi4zqZ7nfsE", "n": "025"}, {"t": "at the edge of the world...", "d": "jul 27", "f": ["iris"], "dur": "15:06", "id": "pb22iiXoq1E", "n": "024"}, {"t": "this hill has been waiting for you", "d": "jul 23", "f": ["iris"], "dur": "15:06", "id": "mo4z6BVFSzg", "n": "023"}, {"t": "you are caught in a snowstorm", "d": "jul 20", "f": ["iris"], "dur": "15:06", "id": "kSMai7zAwX4", "n": "022"}, {"t": "somewhere you've never been", "d": "jul 16", "f": ["iris"], "dur": "15:06", "id": "vDXDXHPDIkM", "n": "021"}, {"t": "your golden hour has found you", "d": "jul 13", "f": ["iris"], "dur": "15:06", "id": "924bICbGtQQ", "n": "020"}, {"t": "liminal escapism.", "d": "jul 8", "f": ["halcyon"], "dur": "15:06", "id": "e1HvHS392KY", "n": "019"}, {"t": "liminal july fourth.", "d": "jul 6", "f": ["halcyon"], "dur": "15:06", "id": "XAnbBnis_j0", "n": "018"}, {"t": "liminal hotel.", "d": "jul 1", "f": ["halcyon"], "dur": "15:06", "id": "kKcZLeXYE7g", "n": "017"}, {"t": "liminal recess.", "d": "jun 29", "f": ["halcyon"], "dur": "15:06", "id": "6aH_YAia78U", "n": "016"}, {"t": "turn around.", "d": "jun 24", "f": ["proteus"], "dur": "15:06", "id": "xWAw45QhGg8", "n": "015"}, {"t": "where light goes to die.", "d": "jun 22", "f": ["proteus"], "dur": "15:06", "id": "v5SErqFWhL8", "n": "014"}, {"t": "you won't find anyone.", "d": "jun 17", "f": ["proteus"], "dur": "15:06", "id": "_lAruHc9dsc", "n": "013"}, {"t": "it's up there.", "d": "jun 15", "f": ["proteus"], "dur": "15:06", "id": "tTz8SP6X2zw", "n": "012"}, {"t": "do not go in the water.", "d": "jun 10", "f": ["proteus"], "dur": "15:06", "id": "8modM9xA0x8", "n": "011"}, {"t": "keep driving.", "d": "jun 8", "f": ["proteus"], "dur": "15:06", "id": "DiW0e89j1VQ", "n": "010"}, {"t": "go home.", "d": "jun 3", "f": ["proteus"], "dur": "15:06", "id": "c_t_SNkvoUM", "n": "009"}, {"t": "please do not leave your seat.", "d": "jun 1", "f": ["proteus"], "dur": "30:06", "id": "eXvclw71iBE", "n": "008"}, {"t": "everything is fine.", "d": "may 28", "f": ["proteus"], "dur": "14:22", "id": "yqYHCdiuyLA", "n": "007"}, {"t": "i'm finally free.", "d": "may 25", "f": ["proteus"], "dur": "11:52", "id": "68BBBPpxQQU", "n": "006"}, {"t": "a vehicle in a void that watches back", "d": "apr 18", "f": ["umbra"], "dur": "12:51", "id": "ZzpSw1_IgZA", "n": "005"}, {"t": "the outside never ends", "d": "apr 5", "f": ["umbra"], "dur": "10:08", "id": "Jq5VTR6CXX8", "n": "004"}, {"t": "this isn't outside", "d": "apr 3", "f": ["umbra"], "dur": "8:19", "id": "Mgo2H7cVECI", "n": "003"}, {"t": "this stairwell shouldn't be here", "d": "mar 18", "f": ["umbra"], "dur": "7:57", "id": "NAwlZxmtrOw", "n": "002"}, {"t": "entry 001", "d": "mar 14", "f": ["umbra"], "dur": "8:01", "id": "qviityuPOzg", "n": "001"}];
 /* the eras: every planet is a chapter of orbitone. (oldest first) */
 const ERA_ORDER=["umbra","proteus","halcyon","iris","neptune","mars","luna"];
 const ERAS={
@@ -750,7 +815,7 @@ const ERAS={
 ERA_ORDER.forEach((k,i)=>{const list=ENTRIES.filter(e=>e.f[0]===k),first=list[list.length-1],last=list[0],now=i===ERA_ORDER.length-1;
   ERAS[k].n=i+1;ERAS[k].span=!first?"":now?`since ${first.d}`:first===last?first.d:`${first.d} – ${last.d}`;ERAS[k].tag=`era ${i+1} · ${ERAS[k].span}`});
 const eraOf=e=>e.f.find(v=>v!=="saturn")||e.f[0];
-const PD={all:["the whole system at once.",`${ERA_ORDER.length} eras, one orbit.`],saturn:["countless pieces circling together.","the long mixes, from every era."]};
+const PD={all:["the whole system at once.",""],saturn:["countless pieces circling together.","the long mixes, from every era."]};
 ERA_ORDER.forEach(k=>PD[k]=[ERAS[k].l,ERAS[k].tag]);
 document.querySelectorAll("[data-era]").forEach(s=>{const z=ERAS[s.dataset.era];if(z)s.textContent=z.tag});
 function setDesc(f){const d=PD[f];document.getElementById("pdesc").innerHTML=`<span>${d[0]}</span>${d[1]?`<em>${d[1]}</em>`:""}`}
@@ -888,10 +953,11 @@ const SC={
   house(x,C,r,t,o){const W=ART_W,H=ART_H,hz=H*(.6+r()*.08),hx=W*(.28+r()*.44),s=.8+r()*.4,ph=r()*9,info={sky:{x:0,y:0,w:W,h:hz},moon:{x:hx>W/2?W*.2:W*.78,y:hz*.32,R:18}};
     skyFill(x,C,hz);artStars(x,r,t,70,.85,hz);
     x.beginPath();x.moveTo(0,H);x.lineTo(0,hz+12);x.quadraticCurveTo(hx,hz-30*s,W,hz+16);x.lineTo(W,H);x.closePath();x.fillStyle=mixHex(C.gnd,C.ink,.3);x.fill();
-    const bw=86*s,bh=50*s,gy=hz-14*s,bx=hx-bw/2;x.fillStyle=C.ink;x.fillRect(bx,gy-bh,bw,bh+2);poly(x,[[bx-8*s,gy-bh],[bx+bw+8*s,gy-bh],[hx,gy-bh-36*s]],C.ink);x.fillRect(bx+bw*.7,gy-bh-30*s,9*s,22*s);
+    const bw=86*s,bh=50*s,gy=hz-14*s,bx=hx-bw/2,hillY=px=>{let u0=0,u1=1;for(let i=0;i<24;i++){const u=(u0+u1)/2;if(2*u*(1-u)*hx+u*u*W<px)u0=u;else u1=u}const u=(u0+u1)/2;return(1-u)*(1-u)*(hz+12)+2*u*(1-u)*(hz-30*s)+u*u*(hz+16)},base=Math.max(gy,hillY(bx),hillY(bx+bw))+3;
+    x.fillStyle=C.ink;x.fillRect(bx,gy-bh,bw,base-gy+bh);poly(x,[[bx-8*s,gy-bh],[bx+bw+8*s,gy-bh],[hx,gy-bh-36*s]],C.ink);x.fillRect(bx+bw*.7,gy-bh-30*s,9*s,22*s);
     const wl=.8+.2*Math.sin(t*.8+ph);glowAt(x,bx+bw*.3,gy-bh*.55,70*s,C.lit,.4*wl);x.fillStyle=rgba(C.lit,.92*wl);x.fillRect(bx+bw*.2,gy-bh*.72,bw*.2,bh*.34);
     x.fillStyle=rgba(C.ink,.9);x.fillRect(bx+bw*.29,gy-bh*.72,1.5,bh*.34);
-    x.strokeStyle=rgba(C.lit,.12);x.lineWidth=3;x.beginPath();x.moveTo(bx+bw*.62,gy);x.quadraticCurveTo(hx+40,lpA(gy,H,.5),W*.55,H);x.stroke();
+    x.strokeStyle=rgba(C.lit,.12);x.lineWidth=3;x.beginPath();x.moveTo(bx+bw*.62,base);x.quadraticCurveTo(hx+40,lpA(gy,H,.5),W*.55,H);x.stroke();
     return info},
   mall(x,C,r,t,o){const W=ART_W,H=ART_H,vx=W*(.42+r()*.16),vy=H*(.5+r()*.06),ew=160+r()*40,eh=96+r()*16,ph=r()*9,fl=flickF(t,ph,C.flick),L=room(vx,vy,ew,eh,1.25),info={};
     const e=shellRoom(x,C,L);const sk=ceilQuad(L,0,1,.36,.64);x.fillStyle=vGrad(x,C.sky0,C.sky1,0,e.tp);x.beginPath();sk.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.closePath();x.fill();
@@ -928,6 +994,21 @@ const SC={
     [[.32,.28],[.68,.05]].forEach(([u,amp],i)=>{const px=fx+bw*u,a=amp*Math.sin(t*1.5+ph+i),L2=86,sxp=px+Math.sin(a)*L2,syp=top+Math.cos(a)*L2;x.lineWidth=1.5;x.beginPath();x.moveTo(px-9,top);x.lineTo(sxp-9,syp);x.moveTo(px+9,top);x.lineTo(sxp+9,syp);x.stroke();x.lineWidth=5;x.beginPath();x.moveTo(sxp-13,syp);x.lineTo(sxp+13,syp);x.stroke()});
     const qx=W*(.66+r()*.1);x.lineWidth=4;x.beginPath();x.moveTo(qx,hz+16);x.lineTo(qx,hz-76);x.lineTo(qx+16,hz-76);x.lineTo(qx+16,hz+16);for(let i=1;i<6;i++){x.moveTo(qx,hz+16-i*16);x.lineTo(qx+16,hz+16-i*16)}x.moveTo(qx+16,hz-76);x.quadraticCurveTo(qx+70,hz-60,qx+110,hz+14);x.stroke();x.lineCap="butt";
     x.fillStyle=rgba(C.ink,.35);poly(x,[[fx-22,hz+18],[fx+bw+22,hz+18],[fx+bw-60,H],[fx-140,H]],rgba(C.ink,.35));return info},
+  hotelRoom(x,C,r,t,o){const W=ART_W,H=ART_H,fy=H*.7,wx=W*.5,wy=H*.1,ww=W*.36,wh=H*.48,ph=r()*9,lamp=.88+.12*Math.sin(t*1.3+ph),info={sky:{x:wx,y:wy,w:ww,h:wh},moon:{x:wx+ww*.7,y:wy+wh*.32,R:16}};
+    x.fillStyle=mixHex(C.ink,C.gnd,.55);x.fillRect(0,0,W,fy);x.fillStyle=vGrad(x,mixHex(C.ink,C.gnd,.45),C.ink,fy,H);x.fillRect(0,fy,W,H-fy);
+    x.fillStyle=vGrad(x,C.sky0,C.sky1,wy,wy+wh);x.fillRect(wx,wy,ww,wh);artStars(x,rng(77),t,14,.7,0);
+    {const rs=rng(12);let px=wx;x.fillStyle=mixHex(C.ink,C.gnd,.3);while(px<wx+ww){const bw=10+rs()*22,bh=wh*(.12+rs()*.3);x.fillRect(px,wy+wh-bh,bw,bh);for(let j=0;j<3;j++)if(rs()<.5){x.fillStyle=rgba(C.lit,.55*(.75+.25*Math.sin(t*.7+px+j)));x.fillRect(px+3+j*5,wy+wh-bh+5+rs()*(bh-10),1.6,1.6);x.fillStyle=mixHex(C.ink,C.gnd,.3)}px+=bw+2}}
+    x.strokeStyle=C.ink;x.lineWidth=5;x.strokeRect(wx,wy,ww,wh);x.lineWidth=3;x.beginPath();x.moveTo(wx+ww/2,wy);x.lineTo(wx+ww/2,wy+wh);x.stroke();
+    const sway=Math.sin(t*.4)*3;x.fillStyle=rgba(C.fog,.22);x.beginPath();x.moveTo(wx-26,wy-8);x.lineTo(wx+14+sway,wy-8);x.quadraticCurveTo(wx+4+sway,wy+wh*.6,wx+18+sway,fy-4);x.lineTo(wx-26,fy-4);x.closePath();x.fill();
+    x.beginPath();x.moveTo(wx+ww+26,wy-8);x.lineTo(wx+ww-14-sway,wy-8);x.quadraticCurveTo(wx+ww-4-sway,wy+wh*.6,wx+ww-18-sway,fy-4);x.lineTo(wx+ww+26,fy-4);x.closePath();x.fill();
+    poly(x,[[wx,wy+wh],[wx+ww,wy+wh],[wx+ww+70,H],[wx-90,H]],rgba(C.lit,.05));
+    glowAt(x,W*.17,H*.48,W*.3,C.lit,.32*lamp);x.fillStyle=C.ink;x.fillRect(W*.11,H*.58,W*.12,H*.14);x.fillStyle=rgba(C.lit,.6);x.fillRect(W*.165,H*.5,3,H*.08);poly(x,[[W*.14,H*.5],[W*.2,H*.5],[W*.19,H*.41],[W*.15,H*.41]],rgba(C.lit,.92*lamp));
+    x.fillStyle=mixHex(C.ink,C.gnd,.3);x.fillRect(W*.24,H*.5,W*.03,H*.24);
+    x.fillStyle=mixHex(C.gnd,C.lit,.16);rrect(x,W*.29,H*.56,W*.1,H*.06,6);x.fill();rrect(x,W*.4,H*.56,W*.1,H*.06,6);x.fill();
+    x.fillStyle=mixHex(C.gnd,C.lit,.1);x.beginPath();x.moveTo(W*.27,H*.62);x.lineTo(W*.52,H*.62);x.lineTo(W*.62,H*.95);x.lineTo(W*.17,H*.95);x.closePath();x.fill();
+    x.fillStyle=rgba(C.lit,.05*lamp);x.beginPath();x.moveTo(W*.27,H*.62);x.lineTo(W*.4,H*.62);x.lineTo(W*.4,H*.95);x.lineTo(W*.17,H*.95);x.closePath();x.fill();
+    x.fillStyle=mixHex(C.ink,C.gnd,.5);x.fillRect(W*.17,H*.95,W*.45,H*.05);
+    return info},
   hotelHall(x,C,r,t,o){const W=ART_W,H=ART_H,vx=W*(.42+r()*.16),vy=H*(.44+r()*.06),L=room(vx,vy,50,76,1.45),ph=r()*9,info={};
     const e=shellRoom(x,C,L);poly(x,[[0,0],[e.l,e.tp],[e.l,e.b],[0,H]],mixHex(C.gnd,C.lit,.1));poly(x,[[W,0],[e.r,e.tp],[e.r,e.b],[W,H]],mixHex(C.gnd,C.lit,.08));
     poly(x,[[0,H],[W,H],[e.r,e.b],[e.l,e.b]],mixHex(C.acc,C.ink,.55));
@@ -972,7 +1053,8 @@ const SC={
     skyFill(x,C,hz);artStars(x,r,t,50,.7,hz);
     for(let i=0;i<3;i++){const y0=hz*(.18+i*.13),amp=14+r()*14,ph=r()*6;x.beginPath();for(let px=0;px<=W;px+=10)x.lineTo(px,y0+Math.sin(px*.012+ph+t*.3)*amp);x.lineTo(W,y0+50);for(let px=W;px>=0;px-=10)x.lineTo(px,y0+50+Math.sin(px*.012+ph+t*.3)*amp);x.closePath();x.fillStyle=rgba(i%2?C.acc:C.lit,.07);x.fill()}
     x.fillStyle=mixHex(C.gnd,C.ink,.2);x.fillRect(0,hz,W,H-hz);x.beginPath();x.moveTo(-20,H);x.quadraticCurveTo(tx,hz-90,W+20,H);x.closePath();x.fillStyle=mixHex(C.gnd,C.acc,.18);x.fill();x.strokeStyle=rgba(C.lit,.2);x.lineWidth=1.5;x.stroke();
-    treeNice(x,r,tx,hz-56+(Math.abs(tx-W/2)/W)*20,130,C.ink,C.lit);return info},
+    const hy=(()=>{let s0=0,s1=1;for(let i=0;i<24;i++){const s=(s0+s1)/2;if((1-s)*(1-s)*-20+2*(1-s)*s*tx+s*s*(W+20)<tx)s0=s;else s1=s}const s=(s0+s1)/2;return(1-s)*(1-s)*H+2*(1-s)*s*(hz-90)+s*s*H})();
+    treeNice(x,r,tx,hy+4,130,C.ink,C.lit);return info},
   cliff(x,C,r,t,o){const W=ART_W,H=ART_H,hz=H*(.48+r()*.06),left=r()<.5,sx=W*(left?.65+r()*.2:.15+r()*.2),info={sky:{x:0,y:0,w:W,h:hz},moon:{x:sx,y:hz*.45,R:17}};
     skyFill(x,C,hz);glowAt(x,sx,hz,260,C.lit,.35);x.fillStyle=vGrad(x,mixHex(C.sky1,C.fog,.5),mixHex(C.gnd,C.fog,.3),hz,H);x.fillRect(0,hz,W,H-hz);
     for(let i=0;i<14;i++){const cx=((r()*W+t*(3+r()*4))%(W+200))-100,cy=hz+20+r()*(H-hz-20),R=50+r()*90;x.beginPath();x.ellipse(cx,cy,R,R*.28,0,0,Math.PI*2);x.fillStyle=rgba(C.fog,.16);x.fill()}
@@ -1110,13 +1192,13 @@ const SCENE_KEYS=[[/stairwell/,"stairsVoid"],[/stair/,"stairs"],[/up there/,"sta
   [/never been/,"distant"],[/snow|winter/,"snow"],[/hill/,"hillTree"],[/edge of the world/,"cliff"],[/dream|bedroom/,"dreamWindow"],[/unburden/,"underwater"],[/heavy nights|ocean|sea\b/,"oceanMoon"],
   [/escape/,"tunnel"],[/safe here/,"lighthouse"],[/vanishing/,"vanish"],[/fulfilled|empty pool/,"emptyPool"],[/shut down/,"currents"],[/sublime|mountain/,"mountains"],[/sanctuary|ice\b|frozen/,"iceCave"],
   [/autumncore/,"autumnRays"],[/septembercore|field/,"goldenFence"],[/octobercore|forest/,"forestPath"],[/still here/,"rooftop"],[/okay|bench/,"bench"],[/hallway|corridor/,"corridor"],[/office/,"office"],[/pool/,"indoorPool"]];
-const SCENE_KEYS_ERA={luna:[[/autumn/,"autumnTrees"],[/hotel/,"hotelHall"],[/hallway|corridor/,"corridor"],[/mall/,"mall"],[/office/,"office"],[/pool/,"indoorPool"]]};
+const SCENE_KEYS_ERA={luna:[[/autumn/,"autumnTrees"],[/hotel/,"hotelRoom"],[/hallway|corridor/,"corridor"],[/mall/,"mall"],[/office/,"office"],[/pool/,"indoorPool"]]};
 const ERA_SCENES={umbra:["corridor","stairsVoid","fakeSky","field","carVoid"],proteus:["openSky","roomTV","seats","house","road","water","stairsUp","mall","void","corridorBack"],halcyon:["playground","hotelHall","fireworks","hillsRoad"],
   iris:["goldenField","distant","snow","hillTree","cliff","dreamWindow"],neptune:["underwater","oceanMoon","tunnel","lighthouse","mountains","vanish","emptyPool","iceCave","currents"],mars:["autumnRays","goldenFence","forestPath"],
   luna:["rooftop","bench","autumnTrees","oceanMoon","hills","goldenFence","house","water"]};
 const SCENE_ALIAS={stairsUp:["stairs",{up:1}],corridorBack:["corridor",{back:1}],hillsRoad:["hills",{road:1}]};
 const sceneCache=new Map();
-function sceneOf(e,era){const k=(e.id||e.t)+"|"+era;if(sceneCache.has(k))return sceneCache.get(k);const tl=e.t.toLowerCase();let s=null;
+function sceneOf(e,era){const k=(e.id||e.t)+"|"+era;if(sceneCache.has(k))return sceneCache.get(k);const tl=(e.t+" "+(e.p||"")).toLowerCase();let s=null;
   for(const[re,id]of(SCENE_KEYS_ERA[era]||[]).concat(SCENE_KEYS))if(re.test(tl)){s=id;break}
   if(!s){const list=ENTRIES.filter(q=>eraOf(q)===era).reverse(),i=Math.max(0,list.indexOf(e)),rot=ERA_SCENES[era]||ERA_SCENES.luna;s=rot[i%rot.length]}
   sceneCache.set(k,s);return s}
@@ -1184,15 +1266,25 @@ function render(f){
   grid.innerHTML=ENTRIES.map((e,k)=>[e,k]).filter(([e])=>f==="all"||e.f.includes(f)).map(([e,k])=>{
     const href=e.id?`https://www.youtube.com/watch?v=${e.id}`:"https://www.youtube.com/@orbitone.mp4/videos";
     const p=`<canvas data-k="${k}" aria-hidden="true"></canvas>`;
-    return `<a class="entry" href="${href}" target="_blank" rel="noopener">
+    return `<a class="entry" style="--ec:var(--${e.f[0]||"glow"})" href="${href}" target="_blank" rel="noopener">
       <div class="plate">${p}${e.dur?`<span class="dur">${e.dur}</span>`:""}${e.soon?`<span class="soon">soon</span>`:""}</div>
       <h3>${esc(e.t)}</h3>
       <div class="meta"><span>${e.n?`entry ${e.n}`:`compilation ${e.c}`} · ${e.d}</span></div>
     </a>`}).join("");
-  grid.querySelectorAll("canvas").forEach(c=>{const e=ENTRIES[+c.dataset.k];drawArt(c,e,f);ALIVE.register(c,e,f,c.closest(".entry"))});
+  grid.querySelectorAll("canvas").forEach(c=>{const e=ENTRIES[+c.dataset.k];c._e=e;c._v=f;LAZY(c);ALIVE.register(c,e,f,c.closest(".entry"))});
 }
+/* cards paint when they come near the screen, not all at once on load */
+const LAZY=(()=>{const io=("IntersectionObserver" in window)?new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){io.unobserve(en.target);later(en.target)}}),{rootMargin:"600px 0px"}):null,q=[];let busy=0;
+  function paint(c){if(!c.isConnected||c._painted===c._v+"|"+(c._e&&c._e.t))return;c._painted=c._v+"|"+(c._e&&c._e.t);try{drawArt(c,c._e,c._v)}catch(err){}}
+  function pump(){const t0=performance.now();while(q.length&&performance.now()-t0<8)paint(q.shift());busy=q.length?requestAnimationFrame(pump):0}
+  function later(c){q.push(c);if(!busy)busy=requestAnimationFrame(pump)}
+  return c=>{c._painted=null;if(!io){paint(c);return}const b=c.getBoundingClientRect();if(b.bottom>-600&&b.top<innerHeight+600)paint(c);else io.observe(c)}})();
 render("all");
-document.querySelectorAll(".filters .chip").forEach(b=>b.addEventListener("click",()=>{
+/* era colors wash the page: the orbit = lavender + teal haze, any planet = its own color */
+const ERA_HEX=(()=>{const cs=getComputedStyle(document.documentElement),o={};["all","umbra","proteus","halcyon","iris","neptune","mars","luna","saturn"].forEach(k=>o[k]=cs.getPropertyValue("--"+k).trim());return o})();
+document.querySelectorAll(".filters .chip").forEach(b=>b.style.setProperty("--cc",ERA_HEX[b.dataset.f]||ERA_HEX.all));
+function washEra(f){const st=document.body.style;if(f==="all"||!ERA_HEX[f]){st.removeProperty("--wash");st.removeProperty("--wash2");st.removeProperty("--ac")}else{const c=ERA_HEX[f];st.setProperty("--wash",c);st.setProperty("--wash2",c);st.setProperty("--ac",c)}}
+document.querySelectorAll(".filters .chip").forEach(b=>b.addEventListener("click",()=>{washEra(b.dataset.f);
   document.querySelectorAll(".filters .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));
   render(b.dataset.f);setDesc(b.dataset.f);orrery.set(b.dataset.f==="all");bodyView.set(b.dataset.f==="all"?null:b.dataset.f);
 }));
@@ -1705,7 +1797,10 @@ try{bodyView=(()=>{
   function close(){clearTimeout(timer);clearInterval(tick);ov.classList.remove("show");setTimeout(()=>{ov.hidden=true;document.body.style.overflow=""},1200);if(lastFocus)lastFocus.focus()}
   go.onclick=open;leave.onclick=close;
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!ov.hidden)close()});
-  document.querySelectorAll("#bpat .chip").forEach(b=>b.onclick=()=>{document.querySelectorAll("#bpat .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));pat=b.dataset.p});
+  const sec=document.getElementById("breath"),cyc={slow:10,box:16,"478":19};
+  function setPat(p){pat=p;if(sec){sec.dataset.p=p;sec.style.setProperty("--bdur",cyc[p]+"s")}ov.dataset.p=p}
+  setPat("slow");
+  document.querySelectorAll("#bpat .chip").forEach(b=>b.onclick=()=>{document.querySelectorAll("#bpat .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));setPat(b.dataset.p)});
 })();
 
 /* the lantern room */
@@ -1989,6 +2084,12 @@ try{bodyView=(()=>{
 /* about: legend links and replaying the intro */
 (()=>{
   document.querySelectorAll("[data-visit]").forEach(a=>a.addEventListener("click",()=>{const c=document.querySelector(`.filters .chip[data-f="${a.dataset.visit}"]`);if(c)c.click()}));
+/* days since: counted in the viewer's own local days, refreshed at midnight */
+(()=>{const els=document.querySelectorAll("[data-since]");if(!els.length)return;
+  const days=d=>{const[y,m,dd]=d.split("-").map(Number),a=new Date(y,m-1,dd),n=new Date(),b=new Date(n.getFullYear(),n.getMonth(),n.getDate());return Math.max(0,Math.round((b-a)/864e5))};
+  function tick(){els.forEach(el=>{const n=days(el.dataset.since);el.textContent=el.tagName==="SPAN"&&el.closest(".since-foot")&&el.dataset.since==="2026-10-15"?(n===1?"1 day":n+" days"):n.toLocaleString()});
+    const n=new Date(),next=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1,0,0,5);setTimeout(tick,next-n)}
+  tick()})();
   const r=document.getElementById("replayIntro");if(r)r.onclick=()=>{if(window.orbitoneIntro)window.orbitoneIntro()};
 })();
 
